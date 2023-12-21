@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>Angular Editor - WYSIWYG</h1>
+  <angular-editor [id]="'editor1'" [(ngModel)]="htmlContent1" [config]="config1" (ngModelChange)="onChange($event)" (blur)="onBlur($event)">
+    <ng-template #customButtons let-executeCommandFn="executeCommandFn">
+      <ae-toolbar-set>
+        <ae-button iconClass="fa fa-html5" title="Angular editor logo" (buttonClick)="executeCommandFn('insertHtml', angularEditorLogo)"></ae-button>
+      </ae-toolbar-set>
+    </ng-template>
+  </angular-editor>
+  <p class="html">
+    HTML Output: <br>  {{ htmlContent1 }}
+  </p>
+  <form [formGroup]="form">
+    <angular-editor [id]="'editor2'" autofocus="true" [config]="config2" [style.width]="'100px'" formControlName="signature" (ngModelChange)="onChange2($event)"></angular-editor>
+  </form>
+  <p>
+    Form Value: {{ form.value.signature }}
+  </p>
+  <p>
+    Form Status: {{ form.status }}
+  </p>
+</div>
+
