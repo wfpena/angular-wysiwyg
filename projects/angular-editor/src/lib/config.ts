@@ -39,6 +39,7 @@ export interface AngularEditorConfig {
   toolbarHiddenButtons?: string[][];
   rawPaste?: boolean;
   editHistoryLimit?: number;
+  imageResizeSensitivity?: number;
 }
 
 export const angularEditorConfig: AngularEditorConfig = {
@@ -76,4 +77,5 @@ export const angularEditorConfig: AngularEditorConfig = {
     ['link', 'unlink', 'image', 'video']
   ]*/
   editHistoryLimit: 50,
+  imageResizeSensitivity: 2,
 };

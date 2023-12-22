@@ -98,24 +98,54 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   @HostListener('window:click', ['$event.target'])
   onClick(e) {
-    console.log('click detected');
-    // if (this.currentSelectedImage === e) return;
+    if (!this.focused) return;
     this.unselectImage();
     if (!e || e.tagName !== 'IMG') return;
-    // if (!e.parentNode || !e.parentNode.classList?.contains('angular-editor-selected-image-container')) {
-    //   this.r.addClass(e.parentNode, 'angular-editor-selected-image-container');
-    // }
     this.currentSelectedImage = e;
     this.addResizeWrapper();
     this.selectImage();
     this.onContentChange(this.textArea.nativeElement);
-    console.log('current selected: ', this.textArea.nativeElement.outerHTML);
   }
 
-  resizeImage = (currentSelected, renderer2, ePos) => (e) => {
+  constructor(
+    private r: Renderer2,
+    private editorService: AngularEditorService,
+    @Inject(DOCUMENT) private doc: Document,
+    private sanitizer: DomSanitizer,
+    private cdRef: ChangeDetectorRef,
+    @Attribute('tabindex') defaultTabIndex: string,
+    @Attribute('autofocus') private autoFocus: any
+  ) {
+    const parsedTabIndex = Number(defaultTabIndex);
+    this.tabIndex = (parsedTabIndex || parsedTabIndex === 0) ? parsedTabIndex : null;
+    this.editSubject
+      .pipe(
+        throttleTime(200, undefined, { leading: false, trailing: true })
+      )
+      .subscribe((html) => {
+        this.addHistory(html);
+      });
+  }
+
+  ngOnInit() {
+    this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : angularEditorConfig.toolbarPosition;
+    this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : angularEditorConfig.editHistoryLimit;
+    this.config.imageResizeSensitivity = this.config.imageResizeSensitivity ? this.config.imageResizeSensitivity : angularEditorConfig.imageResizeSensitivity;
+  }
+
+  ngAfterViewInit() {
+    if (isDefined(this.autoFocus)) {
+      this.focus();
+    }
+  }
+
+  ePos;
+  resizeImage = (currentSelected, renderer2) => (e) => {
     if (!currentSelected) return;
-    const dx = ePos - e.x;
-    let nextWidth = currentSelected.width + dx;
+    const resizeSensitivity = this.config.imageResizeSensitivity || angularEditorConfig.imageResizeSensitivity;
+    const dx = this.ePos - e.x;
+    this.ePos = e.x;
+    let nextWidth = currentSelected.width + (dx * resizeSensitivity);
     if (nextWidth <= 10) nextWidth = 10;
     renderer2.setAttribute(currentSelected, 'width', `${nextWidth}px`);
     // this.imageChanged = true;
@@ -144,7 +174,8 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.listen(wrapper, 'mousedown', (e) => {
       e.preventDefault();
       this.mouseMoveEvtListener();
-      this.mouseMoveEvtListener = this.r.listen(document, 'mousemove', this.resizeImage(this.currentSelectedImage, this.r, e.x));
+      this.ePos = e.x;
+      this.mouseMoveEvtListener = this.r.listen(this.doc, 'mousemove', this.resizeImage(this.currentSelectedImage, this.r));
     });
   }
 
@@ -167,37 +198,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     //   this.onContentChange(this.textArea.nativeElement);
     //   this.imageChanged = false;
     // }
-  }
-
-  constructor(
-    private r: Renderer2,
-    private editorService: AngularEditorService,
-    @Inject(DOCUMENT) private doc: Document,
-    private sanitizer: DomSanitizer,
-    private cdRef: ChangeDetectorRef,
-    @Attribute('tabindex') defaultTabIndex: string,
-    @Attribute('autofocus') private autoFocus: any
-  ) {
-    const parsedTabIndex = Number(defaultTabIndex);
-    this.tabIndex = (parsedTabIndex || parsedTabIndex === 0) ? parsedTabIndex : null;
-    this.editSubject
-      .pipe(
-        throttleTime(200, undefined, { leading: false, trailing: true })
-      )
-      .subscribe((html) => {
-        this.addHistory(html);
-      });
-  }
-
-  ngOnInit() {
-    this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : angularEditorConfig.toolbarPosition;
-    this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : angularEditorConfig.editHistoryLimit;
-  }
-
-  ngAfterViewInit() {
-    if (isDefined(this.autoFocus)) {
-      this.focus();
-    }
   }
 
   onPaste(event: ClipboardEvent){
@@ -372,7 +372,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    * Executed from the contenteditable section while the input property changes
    * @param element html element from contenteditable
    */
-  onContentChange(element: HTMLElement, addChangeToHistory = true): void {
+  onContentChange(element: any, addChangeToHistory = true): void {
     let html = '';
     if (this.modeVisual) {
       html = element.innerHTML;
