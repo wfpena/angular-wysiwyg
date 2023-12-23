@@ -53,7 +53,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   mouseMoveEvtListener = () => {};
   currentSelectedImage: any = null;
-  // imageChanged = false;
   editSubject = new Subject();
 
   focusInstance: any;
@@ -91,9 +90,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   @HostListener('contextmenu')
   preventContextMenu() {
-    console.log('context menu called');
     this.unselectImage();
-    // return false;
   }
 
   @HostListener('window:click', ['$event.target'])
@@ -158,13 +155,12 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     range.selectNode(this.currentSelectedImage);
     range.collapse(toStart);
     selection.addRange(range);
+    this.r.setStyle(this.textArea.nativeElement, 'caret-color', 'transparent');
   }
 
   // TODO: Move image stuff to another service or class
-  // TODO: use class properties for imgWrapper and resizeSquare to avoid duplicating
   addResizeWrapper() {
     const parent = this.currentSelectedImage.parentNode;
-    // if (!parent) return;
     if (parent.classList?.contains('angular-editor-selected-image-wrapper')) return;
     const wrapper = this.r.createElement('div');
     this.r.addClass(wrapper, 'angular-editor-selected-image-wrapper');
@@ -194,10 +190,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.removeClass(this.currentSelectedImage, 'angular-editor-selected-image');
     this.currentSelectedImage = null;
     this.onContentChange(this.textArea.nativeElement);
-    // if (this.imageChanged) {
-    //   this.onContentChange(this.textArea.nativeElement);
-    //   this.imageChanged = false;
-    // }
+    this.r.setStyle(this.textArea.nativeElement, 'caret-color', 'black');
   }
 
   onPaste(event: ClipboardEvent){
@@ -233,7 +226,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.appendChild(oPre, oCode);
     this.r.appendChild(editableElement, oPre);
 
-    // ToDo: move to service
     this.doc.execCommand('defaultParagraphSeparator', false, 'div');
   }
 
@@ -242,6 +234,18 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.setProperty(this.textArea.nativeElement, 'innerHTML', state);
     if (!this.modeVisual) {
       this.setContentAsCode(this.textArea.nativeElement);
+    }
+  }
+
+  ctrlZ(e) {
+    if (this.currentSelectedImage) {
+      this.unselectImage();
+    }
+  }
+
+  ctrlShiftZ(e) {
+    if (this.currentSelectedImage) {
+      this.unselectImage();
     }
   }
 
@@ -271,14 +275,21 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     if (command === 'focus') {
       return;
     }
-    if (command === 'undo') {
-      this.undo();
-      return;
-    }
-    if (command === 'redo') {
-      this.redo();
-      return;
-    }
+    // TODO: Undo / Redo image resize 
+    // if (this.currentSelectedImage) {
+    //   this.unselectImage();
+    //   if (command === 'undo') {
+    //     // this.unselectImage();
+    //     this.undo();
+    //     return;
+    //   }
+    //   if (command === 'redo') {
+    //     // this.unselectImage();
+    //     this.redo();
+    //     return;
+    //   }
+    // }
+    
     if (command === 'toggleEditorMode') {
       this.toggleEditorMode(this.modeVisual);
     } else if (command !== '') {
@@ -295,9 +306,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     }
   }
 
-  /**
-   * focus event
-   */
   onTextAreaFocus(event: FocusEvent): void {
     if (this.focused) {
       event.stopPropagation();
@@ -317,18 +325,10 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    * @description fires when cursor leaves textarea
    */
   public onTextAreaMouseOut(event: MouseEvent): void {
-    // TODO: understand save selection
     this.editorService.saveSelection();
   }
 
-  /**
-   * blur event
-   */
   onTextAreaBlur(event: FocusEvent) {
-    /**
-     * save selection if focussed out
-     */
-    console.log('text area blur');
     this.unselectImage();
     this.editorService.executeInNextQueueIteration(this.editorService.saveSelection);
 
@@ -532,6 +532,27 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.editorToolbar.setEditorMode(!this.modeVisual);
   }
 
+  textPatternCheck() {
+    const selection = this.doc.getSelection();
+    const txtData = selection.anchorNode.textContent;
+    const textPatternsMap = {
+      '1.': { command: 'insertOrderedList', offsets: [3], },
+      '*': { command: 'insertUnorderedList', offsets: [2], },
+    };
+    const patternDetected = textPatternsMap[txtData.trim()];
+    if (patternDetected && 
+      patternDetected.command && 
+      patternDetected.offsets?.includes(selection.anchorOffset)
+    ) {
+      this.doc.execCommand(patternDetected.command, false);
+      const edRange = selection.getRangeAt(0);
+      const edNode = edRange.commonAncestorContainer;
+      const range = this.doc.createRange();
+      range.selectNodeContents(edNode);
+      range.deleteContents();
+    }
+  }
+
   /**
    * toggles editor buttons when cursor moved or positioning
    *
@@ -545,7 +566,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
         if ($event.key === 'Delete') {
           this.selectImage(true);
         }
-        // this.currentSelectedImage = null;
       }
     }
     this.editorToolbar.triggerButtons();
@@ -563,6 +583,9 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       a = a.parentNode;
     }
     this.editorToolbar.triggerBlocks(els);
+    if ($event && $event.type === 'keyup' && $event.key === ' ') {
+      this.textPatternCheck();
+    }
   }
 
   private configure() {

@@ -45,8 +45,11 @@
                (blur)="onTextAreaBlur($event)"
                (click)="exec()"
                (keydown)="exec($event)"
+               (keyup)="exec($event)"
                (mouseout)="onTextAreaMouseOut($event)"
                (paste)="onPaste($event)"
+               (keydown.control.z)="ctrlZ($event)"
+               (keydown.control.shift.z)="ctrlShiftZ($event)"
           >
           </div>
           <span class="angular-editor-placeholder">{{ placeholder || config['placeholder'] }}</span>
