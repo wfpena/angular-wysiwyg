@@ -1,3 +1,13 @@
+# Angular 17 WYSIWYG Text Editor
+
+* Demo URL: https://wfpena.github.io/angular-wysiwyg/
+
+## TODO
+
+<!-- # TODO: Improvements
+
+# Demo URL: https://wfpena.github.io/angular-wysiwyg/
+
 <p align="center">
   <img width="150px" src="https://raw.githubusercontent.com/wfpena/angular-editor/master/docs/angular-editor-logo.png?raw=true" alt="AngularEditor logo"/>
 </p>
@@ -288,4 +298,4 @@ If you like my work and I save your time you can buy me a :beer: or :pizza: [![D
 
 [npm]: https://www.npmjs.com/package/wfpena/angular-wysiwyg
 [demo]: https://angular-editor-wysiwyg.stackblitz.io/
-[example]: https://stackblitz.com/edit/angular-editor-wysiwyg
+[example]: https://stackblitz.com/edit/angular-editor-wysiwyg -->
