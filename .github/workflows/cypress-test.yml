@@ -29,3 +29,7 @@ jobs:
 
       - name: Run Cypress tests
         run: yarn cypress:run:app
+
+      - name: Run demo build
+        if: github.ref == 'refs/heads/demo-build'
+        run: yarn build:demo

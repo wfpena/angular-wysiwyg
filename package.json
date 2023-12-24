@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build angular-editor-app",
+    "build:demo": "ng build angular-editor-app-demo && node postDemoBuild.js",
     "build-prod": "ng build --configuration production",
     "test": "ng test angular-editor-app",
     "test:lib": "ng test angular-editor",
