@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularEditorConfig, UploadResponse } from 'projects/angular-editor/src/public-api';
+import { AngularEditorConfig, UploadResponse, angularEditorConfig } from 'projects/angular-editor/src/public-api';
 // import { AngularEditorConfig, UploadResponse } from 'angular-editor';
 import { map } from 'rxjs';
 
@@ -105,6 +105,11 @@ export class AppComponent implements OnInit {
     ]
   };
 
+  config3 = {
+    ...this.config1,
+    ...angularEditorConfig
+  }
+
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {}
 
   ngOnInit() {
@@ -123,5 +128,10 @@ export class AppComponent implements OnInit {
 
   onChange2(event) {
     console.warn(this.form.value);
+  }
+
+  isObject(val) {
+    if (typeof val == 'object') return true;
+    return false;
   }
 }

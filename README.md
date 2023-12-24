@@ -1,6 +1,46 @@
 # Angular WYSIWYG Text Editor
 
-* Demo URL: https://wfpena.github.io/angular-wysiwyg/
+Rich text editor Whay You See Is What You Get created using Angular 17.
+
+Easy to use and customize.
+
+---
+
+<center>
+<a href="https://wfpena.github.io/angular-wysiwyg/">📝 <b>DEMO - Try it out! 📝</b></a>
+</center>
+
+---
+
+### Configs:
+
+
+|Name|Example Value|
+|--- |--- |
+|customClasses|`[{"name": "quote","class": "quote"}]`|
+|defaultFontName||
+|defaultFontSize|5|
+|defaultParagraphSeparator||
+|editHistoryLimit|50|
+|editable|true|
+|enableToolbar|true|
+|fonts|`[{"class": "arial","name": "Arial"},{"class": "times-new-roman","name": "Times New Roman"},{"class": "calibri","name": "Calibri"},{"class": "comic-sans-ms","name": "Comic Sans MS"}]`|
+|height|auto|
+|imageResizeSensitivity|2|
+|maxHeight|auto|
+|minHeight|0|
+|minWidth|0|
+|outline|true|
+|placeholder|Enter text here...|
+|sanitize|true|
+|showToolbar|true|
+|spellcheck|true|
+|textAreaBackgroundColor|white|
+|toolbarPosition|top|
+|translate|yes|
+|uploadWithCredentials|false|
+|width|auto|
+
 
 ## TODO
 

@@ -1,6 +1,8 @@
 <div class="container">
-  <h1>Angular Editor - WYSIWYG</h1>
-  <angular-editor [id]="'editor1'" [(ngModel)]="htmlContent1" [config]="config1" (ngModelChange)="onChange($event)" (blur)="onBlur($event)">
+  <hr class="solid">
+  <br>
+  <h2>Basic Example with HTML Output:</h2>
+  <angular-editor id="'editor1'" [(ngModel)]="htmlContent1" autofocus="true" [config]="config1" (ngModelChange)="onChange($event)" (blur)="onBlur($event)">
     <ng-template #customButtons let-executeCommandFn="executeCommandFn">
       <ae-toolbar-set>
         <ae-button iconClass="fa fa-html5" title="Angular editor logo" (buttonClick)="executeCommandFn('insertHtml', angularEditorLogo)"></ae-button>
@@ -8,16 +10,47 @@
     </ng-template>
   </angular-editor>
   <p class="html">
-    HTML Output: <br>  {{ htmlContent1 }}
+    HTML Output: <br><br>{{ htmlContent1 }}
   </p>
+  <br>
+  <br>
+  <hr class="solid">
+  <br>
+  <h2>Using Form Validation:</h2>
   <form [formGroup]="form">
-    <angular-editor [id]="'editor2'" autofocus="true" [config]="config2" [style.width]="'100px'" formControlName="signature" (ngModelChange)="onChange2($event)"></angular-editor>
+    <angular-editor [id]="'editor2'" [config]="config2" [style.width]="'100px'" formControlName="signature" (ngModelChange)="onChange2($event)"></angular-editor>
   </form>
   <p>
     Form Value: {{ form.value.signature }}
   </p>
   <p>
-    Form Status: {{ form.status }}
+    Form Status: <span [style.color]="form.status == 'INVALID' ? 'red': 'green'"><b>{{ form.status }}</b></span>
   </p>
+  <br>
+  <br>
+</div>
+<hr class="solid" style="margin: 0 60px;">
+<div style="max-width: 80%;display: flex;align-items: center;flex-direction: column;justify-content: center;padding: 0 220px;">
+  <br>
+  <h2 style="width: 100%;">Input Configs Example and values:</h2>
+  <table>
+    <tr>
+      <th colspan="2">Editor Configs</th>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <th>Example Value</th>
+    </tr>
+    <ng-container *ngFor="let conf of config3 | keyvalue; index as i;">
+      <tr>
+        <td><span style="font-weight: bold;">{{conf.key}}</span></td>
+        <td *ngIf="isObject(conf.value); else elseTableBlock"><pre>{{conf.value | json}}</pre></td>
+        <ng-template #elseTableBlock><td>{{conf.value}}</td></ng-template>
+      </tr>
+    </ng-container>
+  </table>
+  <br>
+  <br>
+  <br>
 </div>
 
