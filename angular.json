@@ -251,6 +251,132 @@
           }
         }
       }
+    },
+    "angular-editor-app-demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/angular-editor-app",
+      "sourceRoot": "projects/angular-editor-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "baseHref": "/angular-wysiwyg/",
+            "outputPath": "docs",
+            "index": "projects/angular-editor-app/src/index.html",
+            "main": "projects/angular-editor-app/src/main.ts",
+            "polyfills": "projects/angular-editor-app/src/polyfills.ts",
+            "tsConfig": "projects/angular-editor-app/tsconfig.app.json",
+            "assets": [
+              "projects/angular-editor-app/src/favicon.ico",
+              "projects/angular-editor-app/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/font-awesome/fonts",
+                "output": "assets/fonts/"
+              }
+            ],
+            "styles": [
+              "projects/angular-editor-app/src/styles.scss"
+            ],
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/angular-editor-app/src/environments/environment.ts",
+                  "with": "projects/angular-editor-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "angular-editor-app:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "angular-editor-app:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "angular-editor-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/angular-editor-app/src/test.ts",
+            "polyfills": "projects/angular-editor-app/src/polyfills.ts",
+            "tsConfig": "projects/angular-editor-app/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-editor-app/karma.conf.js",
+            "assets": [
+              "projects/angular-editor-app/src/favicon.ico",
+              "projects/angular-editor-app/src/assets"
+            ],
+            "styles": [
+              "projects/angular-editor-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular-editor-app/**/*.ts",
+              "projects/angular-editor-app/**/*.html"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/angular-editor-app/e2e/protractor.conf.js",
+            "devServerTarget": "angular-editor-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-editor-app:serve:production"
+            }
+          }
+        }
+      }
     }
   },
   "cli": {

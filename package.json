@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build angular-editor-app",
+    "build:demo": "ng build angular-editor-app-demo && node postDemoBuild.js",
     "build-prod": "ng build --configuration production",
     "test": "yarn test:unit && yarn cypress:run:app",
     "test:e2e": "yarn cypress:run:app",
