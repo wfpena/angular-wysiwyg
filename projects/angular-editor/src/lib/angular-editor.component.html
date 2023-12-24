@@ -39,6 +39,7 @@
                [style.height]="config.height"
                [style.minHeight]="config.minHeight"
                [style.maxHeight]="config.maxHeight"
+               [style.backgroundColor]="config.textAreaBackgroundColor"
                [style.outline]="config.outline === false ? 'none': undefined"
                (input)="onContentChange($event?.target)"
                (focus)="onTextAreaFocus($event)"

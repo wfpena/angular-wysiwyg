@@ -1,4 +1,4 @@
-# Angular 17 WYSIWYG Text Editor
+# Angular WYSIWYG Text Editor
 
 * Demo URL: https://wfpena.github.io/angular-wysiwyg/
 

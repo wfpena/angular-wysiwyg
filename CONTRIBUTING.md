@@ -1,5 +1,5 @@
 
-# Report an Issue
+<!-- # Report an Issue
 
 Help us make AngularEditor better! If you think you might have found a bug, or some other weirdness, start by making sure
 it hasn't already been reported. You can [search through existing @wfpena/angular-editor issues](https://github.com/wfpena/angular-wysiwyg/issues)
@@ -72,4 +72,4 @@ instead of the prebuilt version specified in `package.json`.
 ## Develop
 
 * `npm run build and watch angular-editor`: Continuously builds the `@wfpena/angular-editor` code when sources change.
-* `npm run start`: Continuously builds and runs Demo app when source or tests change.
+* `npm run start`: Continuously builds and runs Demo app when source or tests change. -->

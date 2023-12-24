@@ -19,6 +19,11 @@ export interface AngularEditorConfig {
   height?: 'auto' | string;
   minHeight?: '0' | string;
   maxHeight?: 'auto' | string;
+  /**
+   * @description background-color property of the editor textarea element
+   * @default 'white'
+   */
+  textAreaBackgroundColor?: string;
   width?: 'auto' | string;
   minWidth?: '0' | string;
   translate?: 'yes' | 'now' | string;
@@ -35,10 +40,18 @@ export interface AngularEditorConfig {
   customClasses?: CustomClass[];
   sanitize?: boolean;
   toolbarPosition?: 'top' | 'bottom';
+  /**
+   * @description show outline on textarea when on focus
+   * @default true
+   */
   outline?: boolean;
   toolbarHiddenButtons?: string[][];
   rawPaste?: boolean;
   editHistoryLimit?: number;
+  /** 
+   *  @description Number indicating how fast mouse drag will cause image to resize
+   *  @default 2
+   */
   imageResizeSensitivity?: number;
 }
 
@@ -48,6 +61,7 @@ export const angularEditorConfig: AngularEditorConfig = {
   height: 'auto',
   minHeight: '0',
   maxHeight: 'auto',
+  textAreaBackgroundColor: 'white',
   width: 'auto',
   minWidth: '0',
   translate: 'yes',

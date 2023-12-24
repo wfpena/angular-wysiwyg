@@ -54,6 +54,8 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   mouseMoveEvtListener = () => {};
   currentSelectedImage: any = null;
   editSubject = new Subject();
+  editHistory = [];
+  currentHistoryIndex = -1;
 
   focusInstance: any;
   blurInstance: any;
@@ -128,6 +130,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : angularEditorConfig.toolbarPosition;
     this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : angularEditorConfig.editHistoryLimit;
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity ? this.config.imageResizeSensitivity : angularEditorConfig.imageResizeSensitivity;
+    this.config = { ...angularEditorConfig, ...this.config };
   }
 
   ngAfterViewInit() {
@@ -145,7 +148,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     let nextWidth = currentSelected.width + (dx * resizeSensitivity);
     if (nextWidth <= 10) nextWidth = 10;
     renderer2.setAttribute(currentSelected, 'width', `${nextWidth}px`);
-    // this.imageChanged = true;
   }
 
   selectImage(toStart = false) {
@@ -249,8 +251,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     }
   }
 
-  editHistory = [];
-  currentHistoryIndex = -1;
   undo() {
     if (this.editHistory.length < 1 || this.currentHistoryIndex <= 0) return;
     this.currentHistoryIndex -= 1;
@@ -533,6 +533,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   }
 
   textPatternCheck() {
+    if (!this.modeVisual) return;
     const selection = this.doc.getSelection();
     const txtData = selection.anchorNode.textContent;
     const textPatternsMap = {
@@ -547,8 +548,10 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       this.doc.execCommand(patternDetected.command, false);
       const edRange = selection.getRangeAt(0);
       const edNode = edRange.commonAncestorContainer;
+      selection.removeAllRanges();
       const range = this.doc.createRange();
       range.selectNodeContents(edNode);
+      selection.addRange(range);
       range.deleteContents();
     }
   }

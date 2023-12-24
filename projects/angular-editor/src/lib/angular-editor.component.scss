@@ -16,7 +16,7 @@
       min-height: 5rem;
       padding: 0.5rem 0.8rem 1rem 0.8rem;
       border: 1px solid #ddd;
-      background-color: transparent;
+      // background-color: transparent;
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
@@ -37,7 +37,6 @@
       position: absolute;
       top: 0;
       padding: 0.5rem 0.8rem 1rem 0.9rem;
-      // z-index: 1;
       color: #6c757d;
       opacity: 0.75;
     }
