@@ -1,6 +1,6 @@
 {
-  "name": "angular-wysiwyg",
-  "version": "1.0.0",
+  "name": "@wfpena/angular-wysiwyg",
+  "version": "1.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

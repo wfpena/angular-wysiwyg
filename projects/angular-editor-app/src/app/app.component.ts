@@ -2,6 +2,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularEditorConfig, UploadResponse, angularEditorConfig } from 'projects/angular-editor/src/public-api';
+// import { AngularEditorConfig, UploadResponse, angularEditorConfig } from '../../../../dist/angular-editor';
+
 // import { AngularEditorConfig, UploadResponse } from 'angular-editor';
 import { map } from 'rxjs';
 
