@@ -2,6 +2,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularEditorConfig, UploadResponse, angularEditorConfig } from 'projects/angular-editor/src/public-api';
+// import { AngularEditorConfig, UploadResponse, angularEditorConfig } from '../../../../dist/angular-editor';
+
 // import { AngularEditorConfig, UploadResponse } from 'angular-editor';
 import { map } from 'rxjs';
 
@@ -51,23 +53,23 @@ export class AppComponent implements OnInit {
         tag: 'h1',
       },
     ],
-    uploadUrl: 'http://localhost:9000/upload_img',
-    upload: (file) => {
-      const url = 'http://localhost:9000/upload_img';
-      const uploadData: FormData = new FormData();
-      uploadData.append('file', file, file.name);
-      return this.http.post<{file:string, url: string}>(url, uploadData, {
-        // reportProgress: true,
-        observe: 'response',
-        // withCredentials: this.uploadWithCredentials,
-      })
-      .pipe(
-        map(response => {
-          const imageUrl = response.body.url;
-          return { ...response, body: { imageUrl }} as HttpResponse<UploadResponse>;
-        })
-      );
-    },
+    // uploadUrl: 'http://localhost:9000/upload_img',
+    // upload: (file) => {
+    //   const url = 'http://localhost:9000/upload_img';
+    //   const uploadData: FormData = new FormData();
+    //   uploadData.append('file', file, file.name);
+    //   return this.http.post<{file:string, url: string}>(url, uploadData, {
+    //     // reportProgress: true,
+    //     observe: 'response',
+    //     // withCredentials: this.uploadWithCredentials,
+    //   })
+    //   .pipe(
+    //     map(response => {
+    //       const imageUrl = response.body.url;
+    //       return { ...response, body: { imageUrl }} as HttpResponse<UploadResponse>;
+    //     })
+    //   );
+    // },
     editHistoryLimit: 3,
     imageResizeSensitivity: 2,
     // toolbarHiddenButtons: [
