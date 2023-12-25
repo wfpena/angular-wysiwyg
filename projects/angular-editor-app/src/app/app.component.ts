@@ -110,6 +110,12 @@ export class AppComponent implements OnInit {
     ...angularEditorConfig
   }
 
+  config4 = {
+    ...this.config1,
+    ...angularEditorConfig,
+    minHeight: '150px',
+  }
+
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {}
 
   ngOnInit() {
@@ -128,6 +134,9 @@ export class AppComponent implements OnInit {
 
   onChange2(event) {
     console.warn(this.form.value);
+  }
+
+  onChange3(event) {
   }
 
   isObject(val) {

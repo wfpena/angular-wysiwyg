@@ -6,9 +6,9 @@ Easy to use and customize.
 
 ---
 
-<center>
+<p style="text-align: center;font-size: 16px;">
 <a href="https://wfpena.github.io/angular-wysiwyg/">📝 <b>DEMO - Try it out! 📝</b></a>
-</center>
+</p>
 
 ---
 

@@ -130,7 +130,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : angularEditorConfig.toolbarPosition;
     this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : angularEditorConfig.editHistoryLimit;
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity ? this.config.imageResizeSensitivity : angularEditorConfig.imageResizeSensitivity;
-    this.config = { ...angularEditorConfig, ...this.config };
   }
 
   ngAfterViewInit() {

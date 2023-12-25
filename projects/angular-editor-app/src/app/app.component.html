@@ -50,7 +50,31 @@
     </ng-container>
   </table>
   <br>
+</div>
+<hr class="solid" style="margin: 0 60px;">
+<div style="margin: 0 60px;">
+  <br>
+  <h2 style="width: 100%;">Play with the configs:</h2>
+  <div style="display: flex;flex-direction: column;align-items: center;">
+    <div style="width: 80%;margin-bottom: 20px;">
+      <angular-editor [id]="'editor3'" [config]="config4" [style.width]="'100px'" (ngModelChange)="onChange3($event)"></angular-editor>
+    </div>
+    <div>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+        <ng-container *ngFor="let conf of config3 | keyvalue; index as i;">
+          <tr *ngIf="!isObject(conf.value);">
+            <td><span style="font-weight: bold;">{{conf.key}}</span></td>
+            <td><input [(ngModel)]="config4[conf.key]"></td>
+          </tr>
+        </ng-container>
+      </table>
+    </div>
+  </div>
+  <br>
   <br>
   <br>
 </div>
-
