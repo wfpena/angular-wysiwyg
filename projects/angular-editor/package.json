@@ -1,7 +1,7 @@
 {
   "name": "@wfpena/angular-wysiwyg",
-  "version": "1.0.4",
-  "description": "A rich WYSIWYG text editor for Angular 16+. Rich Text editor component for Angular.",
+  "version": "1.0.5",
+  "description": "A rich WYSIWYG text editor for Angular 13+. Rich Text editor component for Angular built using Angular 17.",
   "author": "Wilson Pena <wilsonf.pena@gmail.com>",
   "repository": "https://github.com/wfpena/angular-wysiwyg",
   "license": "MIT",
@@ -10,8 +10,8 @@
     "url": "https://github.com/wfpena/angular-wysiwyg/issues"
   },
   "peerDependencies": {
-    "@angular/common": ">=16",
-    "@angular/core": ">=16"
+    "@angular/common": ">=13",
+    "@angular/core": ">=13"
   },
   "dependencies": {
     "tslib": "^2.6.2"
@@ -25,6 +25,10 @@
     "angular-wysiwyg-editor",
     "wysiwyg-editor",
     "rich",
-    "rich text editor"
+    "rich text editor",
+    "angular17",
+    "angular17 editor",
+    "angular 17 wysiwyg",
+    "angular 17 text editor"
   ]
 }
