@@ -86,7 +86,6 @@ export class AngularEditorService {
    * @param html HTML string
    */
   insertHtml(html: string): void {
-
     const isHTMLInserted = this.doc.execCommand('insertHTML', false, html);
 
     if (!isHTMLInserted) {
@@ -141,7 +140,6 @@ export class AngularEditorService {
 
   /** check any selection is made or not */
   private checkSelection(): any {
-
     const selectedText = this.savedSelection.toString();
 
     if (selectedText.length === 0) {
@@ -155,9 +153,7 @@ export class AngularEditorService {
    * @param file The file
    */
   uploadImage(file: File): Observable<HttpEvent<UploadResponse>> {
-
     const uploadData: FormData = new FormData();
-
     uploadData.append('file', file, file.name);
 
     return this.http.post<UploadResponse>(this.uploadUrl, uploadData, {
@@ -167,15 +163,11 @@ export class AngularEditorService {
     });
   }
 
-  // images: any[] = [];
-
   /**
    * Insert image with Url
    * @param imageUrl The imageUrl.
    */
   insertImage(imageUrl: string) {
-    // this.doc.execCommand('insertHTML', false, `<div class="angular-editor-selected-image-container"><img id="img-${this.images.length}-" src="${imageUrl}"/></div>`);
-    // this.doc.execCommand('insertHTML', false, `<img id="img-${this.images.length}-" src="${imageUrl}"/>`);
     this.doc.execCommand('insertHTML', false, `<img src="${imageUrl}"/>`);
   }
 
@@ -186,8 +178,9 @@ export class AngularEditorService {
   createCustomClass(customClass: CustomClass) {
     let newTag = this.selectedText;
     if (customClass) {
-      const tagName = customClass.tag ? customClass.tag : 'span';
-      newTag = '<' + tagName + ' class="' + customClass.class + '">' + this.selectedText + '</' + tagName + '>';
+      const tagName = customClass.tag ? customClass.tag : 'div';
+      if (!this.selectedText) this.selectedText = '&nbsp;';
+      newTag += '<' + tagName + ' class="' + customClass.class + '">' + this.selectedText + '</' + tagName + '>';
     }
     this.insertHtml(newTag);
   }
