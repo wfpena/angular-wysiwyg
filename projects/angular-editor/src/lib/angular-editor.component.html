@@ -51,6 +51,7 @@
                (paste)="onPaste($event)"
                (keydown.control.z)="ctrlZ($event)"
                (keydown.control.shift.z)="ctrlShiftZ($event)"
+               (keyup.enter)="handleEnter($event)"
           >
           </div>
           <span class="angular-editor-placeholder">{{ placeholder || config['placeholder'] }}</span>

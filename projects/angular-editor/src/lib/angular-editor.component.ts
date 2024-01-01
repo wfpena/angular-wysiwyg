@@ -264,6 +264,18 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.onContentChange(this.textArea.nativeElement, false);
   }
 
+  handleEnter(e) {
+    const sel = this.doc.getSelection();
+    const focusNode = sel.focusNode as Node & HTMLElement & any;
+    if (focusNode && focusNode.previousSibling && focusNode.classList?.contains('quote')) {
+      if (focusNode.innerHTML === '<br>' && focusNode.previousSibling.innerHTML === '<br>') {
+        this.editorService.replaceWithOwnChildren(focusNode.previousSibling);
+        this.editorService.replaceWithOwnChildren(focusNode);
+        this.onContentChange(this.textArea.nativeElement, false);
+      }
+    }
+  }
+
   /**
    * Executed command from editor header buttons
    * @param command string from triggerCommand
@@ -538,20 +550,31 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     const textPatternsMap = {
       '1.': { command: 'insertOrderedList', offsets: [3], },
       '*': { command: 'insertUnorderedList', offsets: [2], },
+      '>': { command: () => this.editorService.createCustomClass({ name:'quote', class: 'quote' }), offsets: [2], },
     };
     const patternDetected = textPatternsMap[txtData.trim()];
     if (patternDetected && 
       patternDetected.command && 
       patternDetected.offsets?.includes(selection.anchorOffset)
     ) {
-      this.doc.execCommand(patternDetected.command, false);
-      const edRange = selection.getRangeAt(0);
-      const edNode = edRange.commonAncestorContainer;
-      selection.removeAllRanges();
-      const range = this.doc.createRange();
-      range.selectNodeContents(edNode);
-      selection.addRange(range);
-      range.deleteContents();
+      if (typeof patternDetected.command == 'string') {
+        this.doc.execCommand(patternDetected.command, false);
+        const edRange = selection.getRangeAt(0);
+        const edNode = edRange.commonAncestorContainer;
+        selection.removeAllRanges();
+        const range = this.doc.createRange();
+        range.selectNodeContents(edNode);
+        selection.addRange(range);
+        range.deleteContents();
+      } else {
+        const edRange = selection.getRangeAt(0);
+        const edNode = edRange.commonAncestorContainer;
+        selection.removeAllRanges();
+        const range = this.doc.createRange();
+        range.selectNodeContents(edNode);
+        selection.addRange(range);
+        patternDetected.command();
+      }
     }
   }
 
