@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "sourceMap": true,
+    "sourceMap": false, // keep true?
     "declaration": false,
     "module": "es2022",
     "moduleResolution": "node",

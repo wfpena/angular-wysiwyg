@@ -42,6 +42,53 @@
               "projects/angular-editor/**/*.html"
             ]
           }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor:serve",
+            "configFile": "projects/angular-editor/cypress.config.ts"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-editor:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/angular-editor/cypress.config.ts"
+          }
+        },
+        "ct": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor:serve",
+            "watch": true,
+            "headless": false,
+            "testingType": "component"
+          },
+          "configurations": {
+            "development": {
+              "devServerTarget": "angular-editor:serve:development"
+            }
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-editor:serve:production"
+            }
+          }
         }
       }
     },
@@ -80,7 +127,7 @@
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
-            "sourceMap": true,
+            "sourceMap": false,
             "optimization": false,
             "namedChunks": true
           },
@@ -157,14 +204,51 @@
           }
         },
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "protractorConfig": "projects/angular-editor-app/e2e/protractor.conf.js",
-            "devServerTarget": "angular-editor-app:serve"
+            "devServerTarget": "angular-editor-app:serve",
+            "watch": true,
+            "headless": false
           },
           "configurations": {
             "production": {
               "devServerTarget": "angular-editor-app:serve:production"
+            }
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor-app:serve",
+            "configFile": "projects/angular-editor-app/cypress.config.ts"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-editor-app:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor-app:serve",
+            "tsConfig": "projects/angular-editor-app/tsconfig.e2e.json",
+            "watch": true,
+            "headless": false,
+            "configFile": "projects/angular-editor-app/cypress.config.ts"
+          }
+        },
+        "ct": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-editor-app:serve",
+            "watch": true,
+            "headless": false,
+            "testingType": "component"
+          },
+          "configurations": {
+            "development": {
+              "devServerTarget": "angular-editor-app:serve:development"
             }
           }
         }
@@ -175,7 +259,9 @@
     "analytics": "fbddda2f-258b-4004-8062-d701809d0a1c",
     "packageManager": "yarn",
     "schematicCollections": [
-      "@angular-eslint/schematics"
+      "@cypress/schematic",
+      "@angular-eslint/schematics",
+      "@schematics/angular"
     ]
   }
 }
