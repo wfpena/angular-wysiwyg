@@ -46,4 +46,14 @@ describe('AngularEditorComponent', () => {
 
     expect(outputRawText).toEqual(rawText);
   });
+
+  it('should insert quote on text pattern check', async () => {
+    const handleEnterSpy = spyOn(component, 'handleEnter');
+    const focusSpy = spyOn(component, 'focus');
+    component.focus();
+    const textAreaInput = component.textArea.nativeElement;
+    textAreaInput.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+    expect(handleEnterSpy).toHaveBeenCalledTimes(1);
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+  });
 });
