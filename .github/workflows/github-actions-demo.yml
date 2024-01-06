@@ -1,0 +1,31 @@
+name: Cypress Test
+
+on:
+  push: # Only on commits to the main branch
+    branches:
+      - main
+      - "*"
+
+  pull_request: # Every commit on opened PRs
+    branches:
+      - "*"
+
+jobs:
+  cypress-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.yarnpkg.com/
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Cypress tests
+        run: yarn cypress:run:app

@@ -21,6 +21,7 @@
     "cypress:open": "cypress open angular-editor-app",
     "cypress:open:lib": "ng run angular-editor:cypress-open",
     "cypress:open:app": "ng run angular-editor-app:cypress-open --browser chrome",
+    "cypress:run:app": "ng run angular-editor-app:cypress-run",
     "cypress:run": "cypress run"
   },
   "private": true,
