@@ -14,7 +14,7 @@ fs.readFile('./docs/main.js', 'utf8', function (err,data) {
   const versionJson = {
     version: package.version,
     name: package.name,
-    timestamp: new Date().toString(),
+    timestamp: new Date().toISOString(),
   };
   fs.writeFileSync('./docs/version.json', JSON.stringify(versionJson));
 });
