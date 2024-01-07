@@ -25,5 +25,7 @@
         "dist/angular-editor/*"
       ]
     }
-  }
+  },
+  "exclude": ["cypress.config.ts"],
+  "files": ["cypress.config.ts"]
 }

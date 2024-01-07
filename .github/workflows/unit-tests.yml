@@ -1,0 +1,34 @@
+name: Unit Tests
+
+on:
+  push: # Only on commits to the main branch
+    branches:
+      - main
+      - "*"
+
+  pull_request: # Every commit on opened PRs
+    branches:
+      - "*"
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.yarnpkg.com/
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Lib Unit Tests
+        run: yarn test:lib
+
+      - name: Run App Unit Tests
+        run: yarn test
