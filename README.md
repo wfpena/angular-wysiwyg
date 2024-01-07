@@ -1,8 +1,8 @@
-# Angular WYSIWYG Text Editor
-
 <p align="center">
   <img width="150px" src="projects\angular-editor-app\src\assets\angular-wysiwyg-logo2.PNG" alt="AngularEditor logo"/>
 </p>
+
+# Angular WYSIWYG Text Editor
 
 Rich text editor Whay You See Is What You Get created using Angular 17.
 
