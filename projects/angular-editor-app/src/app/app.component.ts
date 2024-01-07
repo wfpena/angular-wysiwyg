@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularEditorConfig, UploadResponse, angularEditorConfig } from 'projects/angular-editor/src/public-api';
+import { AngularEditorConfig, UploadResponse, angularEditorConfig } from '../../../angular-editor/src/public-api';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { AngularEditorConfig, UploadResponse, angularEditorConfig } from 'projec
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+  title = 'angular-wysiwyg-app';
 
   form: FormGroup;
 

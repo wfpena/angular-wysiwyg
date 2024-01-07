@@ -2,10 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import { AngularEditorModule } from 'projects/angular-editor/src/public-api';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AngularEditorModule } from '../../../angular-editor/src/lib/angular-editor.module';
 
 @NgModule({
   declarations: [
@@ -13,8 +12,8 @@ import { AngularEditorModule } from 'projects/angular-editor/src/public-api';
   ],
   imports: [
     BrowserModule,
-    AngularEditorModule,
     HttpClientModule,
+    AngularEditorModule,
     FormsModule,
     ReactiveFormsModule
   ],
