@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "types": ["cypress"]
+  },
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts",
+    "**/*.ts",
+    "*.ts",
+  ]
+}

@@ -12,7 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   AppComponent: () => (/* binding */ AppComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ 8849);
-/* harmony import */ var projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! projects/angular-editor/src/public-api */ 9317);
+/* harmony import */ var _angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../angular-editor/src/public-api */ 9317);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 1699);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ 4860);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ 6575);
@@ -126,7 +126,7 @@ function AppComponent_ng_container_61_Template(rf, ctx) {
 class AppComponent {
   formBuilder;
   http;
-  title = 'app';
+  title = 'angular-wysiwyg-app';
   form;
   htmlContent1 = '';
   htmlContent2 = '';
@@ -207,11 +207,11 @@ class AppComponent {
   };
   config3 = {
     ...this.config1,
-    ...projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig
+    ..._angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig
   };
   config4 = {
     ...this.config1,
-    ...projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig,
+    ..._angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig,
     minHeight: '150px'
   };
   constructor(formBuilder, http) {
@@ -377,7 +377,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.component */ 3048);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ 8849);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ 4860);
-/* harmony import */ var projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! projects/angular-editor/src/public-api */ 9317);
+/* harmony import */ var _angular_editor_src_lib_angular_editor_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../angular-editor/src/lib/angular-editor.module */ 5521);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 1699);
 
 
@@ -394,13 +394,13 @@ class AppModule {
     bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_0__.AppComponent]
   });
   static ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjector"]({
-    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.BrowserModule, projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_1__.AngularEditorModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClientModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormsModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.ReactiveFormsModule]
+    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.BrowserModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClientModule, _angular_editor_src_lib_angular_editor_module__WEBPACK_IMPORTED_MODULE_1__.AngularEditorModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormsModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.ReactiveFormsModule]
   });
 }
 (function () {
   (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵsetNgModuleScope"](AppModule, {
     declarations: [_app_component__WEBPACK_IMPORTED_MODULE_0__.AppComponent],
-    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.BrowserModule, projects_angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_1__.AngularEditorModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClientModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormsModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.ReactiveFormsModule]
+    imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__.BrowserModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_4__.HttpClientModule, _angular_editor_src_lib_angular_editor_module__WEBPACK_IMPORTED_MODULE_1__.AngularEditorModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormsModule, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.ReactiveFormsModule]
   });
 })();
 
