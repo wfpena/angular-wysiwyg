@@ -141,9 +141,10 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   ePos;
   resizeImage = (currentSelected, renderer2) => (e) => {
     if (!currentSelected) return;
-    const resizeSensitivity = this.config.imageResizeSensitivity || angularEditorConfig.imageResizeSensitivity;
-    const dx = this.ePos - e.x;
-    this.ePos = e.x;
+    const resizeSensitivity = this.config.imageResizeSensitivity || angularEditorConfig.imageResizeSensitivity || 2;
+    const currX = e.x != null ? e.x : e.clientX;
+    const dx = this.ePos - currX;
+    this.ePos = currX;
     let nextWidth = currentSelected.width + (dx * resizeSensitivity);
     if (nextWidth <= 10) nextWidth = 10;
     renderer2.setAttribute(currentSelected, 'width', `${nextWidth}px`);
@@ -171,7 +172,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.listen(wrapper, 'mousedown', (e) => {
       e.preventDefault();
       this.mouseMoveEvtListener();
-      this.ePos = e.x;
+      this.ePos = e.x != null ? e.x : e.clientX;
       this.mouseMoveEvtListener = this.r.listen(this.doc, 'mousemove', this.resizeImage(this.currentSelectedImage, this.r));
     });
   }
