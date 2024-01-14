@@ -1,7 +1,7 @@
 name: Cypress Test
 
 on:
-  push: # Only on commits to the main branch
+  push:
     branches:
       - main
       - "*"
