@@ -48,7 +48,7 @@ export interface AngularEditorConfig {
   toolbarHiddenButtons?: string[][];
   rawPaste?: boolean;
   editHistoryLimit?: number;
-  /** 
+  /**
    *  @description Number indicating how fast mouse drag will cause image to resize
    *  @default 2
    */
@@ -72,10 +72,10 @@ export const angularEditorConfig: AngularEditorConfig = {
   defaultFontName: '',
   defaultFontSize: '',
   fonts: [
-    {class: 'arial', name: 'Arial'},
-    {class: 'times-new-roman', name: 'Times New Roman'},
-    {class: 'calibri', name: 'Calibri'},
-    {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+    { class: 'arial', name: 'Arial' },
+    { class: 'times-new-roman', name: 'Times New Roman' },
+    { class: 'calibri', name: 'Calibri' },
+    { class: 'comic-sans-ms', name: 'Comic Sans MS' },
   ],
   // uploadUrl: 'v1/image',
   uploadWithCredentials: false,

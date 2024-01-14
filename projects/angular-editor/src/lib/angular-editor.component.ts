@@ -3,7 +3,8 @@ import {
   AfterViewInit,
   Attribute,
   ChangeDetectorRef,
-  Component, ContentChild,
+  Component,
+  ContentChild,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -15,8 +16,9 @@ import {
   OnInit,
   Output,
   Renderer2,
-  SecurityContext, TemplateRef,
-  ViewChild
+  SecurityContext,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -34,13 +36,14 @@ import { Subject, throttleTime } from 'rxjs';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AngularEditorComponent),
-      multi: true
+      multi: true,
     },
-    AngularEditorService
-  ]
+    AngularEditorService,
+  ],
 })
-export class AngularEditorComponent implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy {
-
+export class AngularEditorComponent
+  implements OnInit, ControlValueAccessor, AfterViewInit, OnDestroy
+{
   private onChange: (value: string) => void;
   private onTouched: () => void;
 
@@ -54,7 +57,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   mouseMoveEvtListener = () => {};
   currentSelectedImage: any = null;
   editSubject = new Subject();
-  editHistory = [];
+  editHistory = [] as any[];
   currentHistoryIndex = -1;
 
   focusInstance: any;
@@ -67,21 +70,23 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   @Output() html;
 
-  @ViewChild('editor', {static: true}) textArea: ElementRef;
-  @ViewChild('editorWrapper', {static: true}) editorWrapper: ElementRef;
+  @ViewChild('editor', { static: true }) textArea: ElementRef;
+  @ViewChild('editorWrapper', { static: true }) editorWrapper: ElementRef;
   @ViewChild('editorToolbar') editorToolbar: AngularEditorToolbarComponent;
-  @ContentChild("customButtons") customButtonsTemplateRef?: TemplateRef<any>;
+  @ContentChild('customButtons') customButtonsTemplateRef?: TemplateRef<any>;
   executeCommandFn = this.executeCommand.bind(this);
 
   @Output() viewMode = new EventEmitter<boolean>();
 
   /** emits `blur` event when focused out from the textarea */
-    // eslint-disable-next-line @angular-eslint/no-output-native, @angular-eslint/no-output-rename
-  @Output('blur') blurEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+  // eslint-disable-next-line @angular-eslint/no-output-native, @angular-eslint/no-output-rename
+  @Output('blur') blurEvent: EventEmitter<FocusEvent> =
+    new EventEmitter<FocusEvent>();
 
   /** emits `focus` event when focused in to the textarea */
-    // eslint-disable-next-line @angular-eslint/no-output-rename, @angular-eslint/no-output-native
-  @Output('focus') focusEvent: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+  // eslint-disable-next-line @angular-eslint/no-output-rename, @angular-eslint/no-output-native
+  @Output('focus') focusEvent: EventEmitter<FocusEvent> =
+    new EventEmitter<FocusEvent>();
 
   @HostBinding('attr.tabindex') tabindex = -1;
 
@@ -109,27 +114,35 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   constructor(
     private r: Renderer2,
     private editorService: AngularEditorService,
+    // @ts-ignore
     @Inject(DOCUMENT) private doc: Document,
     private sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
+    // @ts-ignore
     @Attribute('tabindex') defaultTabIndex: string,
-    @Attribute('autofocus') private autoFocus: any
+    // @ts-ignore
+    @Attribute('autofocus') private autoFocus: any,
   ) {
     const parsedTabIndex = Number(defaultTabIndex);
-    this.tabIndex = (parsedTabIndex || parsedTabIndex === 0) ? parsedTabIndex : null;
+    this.tabIndex =
+      parsedTabIndex || parsedTabIndex === 0 ? parsedTabIndex : null;
     this.editSubject
-      .pipe(
-        throttleTime(200, undefined, { leading: false, trailing: true })
-      )
+      .pipe(throttleTime(200, undefined, { leading: false, trailing: true }))
       .subscribe((html) => {
         this.addHistory(html);
       });
   }
 
   ngOnInit() {
-    this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : angularEditorConfig.toolbarPosition;
-    this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : angularEditorConfig.editHistoryLimit;
-    this.config.imageResizeSensitivity = this.config.imageResizeSensitivity ? this.config.imageResizeSensitivity : angularEditorConfig.imageResizeSensitivity;
+    this.config.toolbarPosition = this.config.toolbarPosition
+      ? this.config.toolbarPosition
+      : angularEditorConfig.toolbarPosition;
+    this.config.editHistoryLimit = this.config.editHistoryLimit
+      ? this.config.editHistoryLimit
+      : angularEditorConfig.editHistoryLimit;
+    this.config.imageResizeSensitivity = this.config.imageResizeSensitivity
+      ? this.config.imageResizeSensitivity
+      : angularEditorConfig.imageResizeSensitivity;
   }
 
   ngAfterViewInit() {
@@ -141,19 +154,25 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   ePos;
   resizeImage = (currentSelected, renderer2) => (e) => {
     if (!currentSelected) return;
-    const resizeSensitivity = this.config.imageResizeSensitivity || angularEditorConfig.imageResizeSensitivity || 2;
+    const resizeSensitivity =
+      this.config.imageResizeSensitivity ||
+      angularEditorConfig.imageResizeSensitivity ||
+      2;
     const currX = e.x != null ? e.x : e.clientX;
     const dx = this.ePos - currX;
     this.ePos = currX;
-    let nextWidth = currentSelected.width + (dx * resizeSensitivity);
+    let nextWidth = currentSelected.width + dx * resizeSensitivity;
     if (nextWidth <= 10) nextWidth = 10;
     renderer2.setAttribute(currentSelected, 'width', `${nextWidth}px`);
-  }
+  };
 
   selectImage(toStart = false) {
-    const selection = this.doc.getSelection();
+    const selection = this.doc.getSelection() as Selection;
     selection.removeAllRanges();
     const range = this.doc.createRange();
+    if (!this.currentSelectedImage?.parentNode) {
+      return;
+    }
     range.selectNode(this.currentSelectedImage);
     range.collapse(toStart);
     selection.addRange(range);
@@ -163,7 +182,8 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   // TODO: Move image stuff to another service or class
   addResizeWrapper() {
     const parent = this.currentSelectedImage.parentNode;
-    if (parent.classList?.contains('angular-editor-selected-image-wrapper')) return;
+    if (parent.classList?.contains('angular-editor-selected-image-wrapper'))
+      return;
     const wrapper = this.r.createElement('div');
     this.r.addClass(wrapper, 'angular-editor-selected-image-wrapper');
     this.r.insertBefore(parent, wrapper, this.currentSelectedImage);
@@ -173,14 +193,20 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       e.preventDefault();
       this.mouseMoveEvtListener();
       this.ePos = e.x != null ? e.x : e.clientX;
-      this.mouseMoveEvtListener = this.r.listen(this.doc, 'mousemove', this.resizeImage(this.currentSelectedImage, this.r));
+      this.mouseMoveEvtListener = this.r.listen(
+        this.doc,
+        'mousemove',
+        this.resizeImage(this.currentSelectedImage, this.r),
+      );
     });
   }
 
   removeResizeWrapper() {
     this.mouseMoveEvtListener();
-    const wrappers = this.doc.getElementsByClassName('angular-editor-selected-image-wrapper');
-    for (let i=wrappers.length-1;i>=0;i--) {
+    const wrappers = this.doc.getElementsByClassName(
+      'angular-editor-selected-image-wrapper',
+    );
+    for (let i = wrappers.length - 1; i >= 0; i--) {
       const wrapper = wrappers[i];
       this.editorService.replaceWithOwnChildren(wrapper);
     }
@@ -189,16 +215,19 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   unselectImage() {
     this.removeResizeWrapper();
     if (!this.currentSelectedImage) return;
-    this.r.removeClass(this.currentSelectedImage, 'angular-editor-selected-image');
+    this.r.removeClass(
+      this.currentSelectedImage,
+      'angular-editor-selected-image',
+    );
     this.currentSelectedImage = null;
     this.onContentChange(this.textArea.nativeElement);
     this.r.setStyle(this.textArea.nativeElement, 'caret-color', 'black');
   }
 
-  onPaste(event: ClipboardEvent){
+  onPaste(event: ClipboardEvent) {
     if (this.config.rawPaste) {
       event.preventDefault();
-      const text = event.clipboardData.getData('text/plain');
+      const text = event.clipboardData?.getData('text/plain');
       document.execCommand('insertHTML', false, text);
       return text;
     }
@@ -223,8 +252,12 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     this.r.setStyle(oCode, 'background-color', '#fff5b9');
     this.r.setProperty(oCode, 'contentEditable', true);
     this.r.appendChild(oCode, oContent);
-    this.focusInstance = this.r.listen(oCode, 'focus', (event) => this.onTextAreaFocus(event));
-    this.blurInstance = this.r.listen(oCode, 'blur', (event) => this.onTextAreaBlur(event));
+    this.focusInstance = this.r.listen(oCode, 'focus', (event) =>
+      this.onTextAreaFocus(event),
+    );
+    this.blurInstance = this.r.listen(oCode, 'blur', (event) =>
+      this.onTextAreaBlur(event),
+    );
     this.r.appendChild(oPre, oCode);
     this.r.appendChild(editableElement, oPre);
 
@@ -266,10 +299,18 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   }
 
   handleEnter(e) {
-    const sel = this.doc.getSelection();
+    const sel = this.doc.getSelection() as Selection;
     const focusNode = sel.focusNode as Node & HTMLElement & any;
-    if (focusNode && focusNode.previousSibling && focusNode.classList?.contains('quote')) {
-      if (focusNode.innerHTML === '<br>' && focusNode.previousSibling.innerHTML === '<br>') {
+    if (
+      focusNode &&
+      focusNode.previousSibling &&
+      (focusNode.classList?.contains('angular-editor-quote') ||
+        focusNode.classList?.contains('quote'))
+    ) {
+      if (
+        focusNode.innerHTML === '<br>' &&
+        focusNode.previousSibling.innerHTML === '<br>'
+      ) {
         this.editorService.replaceWithOwnChildren(focusNode.previousSibling);
         this.editorService.replaceWithOwnChildren(focusNode);
         this.onContentChange(this.textArea.nativeElement, false);
@@ -287,7 +328,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     if (command === 'focus') {
       return;
     }
-    // TODO: Undo / Redo image resize 
+    // TODO: Undo / Redo image resize
     // if (this.currentSelectedImage) {
     //   this.unselectImage();
     //   if (command === 'undo') {
@@ -301,7 +342,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     //     return;
     //   }
     // }
-    
     if (command === 'toggleEditorMode') {
       this.toggleEditorMode(this.modeVisual);
     } else if (command !== '') {
@@ -342,7 +382,9 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   onTextAreaBlur(event: FocusEvent) {
     this.unselectImage();
-    this.editorService.executeInNextQueueIteration(this.editorService.saveSelection);
+    this.editorService.executeInNextQueueIteration(
+      this.editorService.saveSelection,
+    );
 
     if (typeof this.onTouched === 'function') {
       this.onTouched();
@@ -350,7 +392,11 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
     if (event.relatedTarget !== null) {
       const parent = (event.relatedTarget as HTMLElement).parentElement;
-      if (!parent.classList.contains('angular-editor-toolbar-set') && !parent.classList.contains('ae-picker')) {
+      if (
+        parent &&
+        !parent.classList.contains('angular-editor-toolbar-set') &&
+        !parent.classList.contains('ae-picker')
+      ) {
         this.blurEvent.emit(event);
         this.focused = false;
       }
@@ -365,13 +411,16 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       this.textArea.nativeElement.focus();
     } else {
       const sourceText = this.doc.getElementById('sourceText' + this.id);
-      sourceText.focus();
+      sourceText?.focus();
       this.focused = true;
     }
   }
 
   addHistory(html) {
-    if (this.editHistory.length >= this.config.editHistoryLimit) {
+    if (
+      this.config.editHistoryLimit != null &&
+      this.editHistory.length >= this.config.editHistoryLimit
+    ) {
       this.editHistory.shift();
       this.currentHistoryIndex -= 1;
     }
@@ -391,12 +440,16 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     } else {
       html = element.innerText;
     }
-    if ((!html || html === '<br>')) {
+    if (!html || html === '<br>') {
       html = '';
     }
     if (typeof this.onChange === 'function') {
-      this.onChange(this.config.sanitize || this.config.sanitize === undefined ? this.sanitizer.sanitize(SecurityContext.HTML, html) : html);
-      if ((!html) !== this.showPlaceholder) {
+      this.onChange(
+        this.config.sanitize || this.config.sanitize === undefined
+          ? this.sanitizer.sanitize(SecurityContext.HTML, html) || html
+          : html,
+      );
+      if (!html !== this.showPlaceholder) {
         this.togglePlaceholder(this.showPlaceholder);
       }
     }
@@ -413,7 +466,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    * @param fn a function
    */
   registerOnChange(fn: any): void {
-    this.onChange = e => (e === '<br>' ? fn('') : fn(e)) ;
+    this.onChange = (e) => (e === '<br>' ? fn('') : fn(e));
   }
 
   /**
@@ -432,7 +485,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    * @param value value to be executed when there is a change in contenteditable
    */
   writeValue(value: any): void {
-
     if ((!value || value === '<br>' || value === '') !== this.showPlaceholder) {
       this.togglePlaceholder(this.showPlaceholder);
     }
@@ -451,7 +503,11 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    */
   refreshView(value: string): void {
     const normalizedValue = value === null ? '' : value;
-    this.r.setProperty(this.textArea.nativeElement, 'innerHTML', normalizedValue);
+    this.r.setProperty(
+      this.textArea.nativeElement,
+      'innerHTML',
+      normalizedValue,
+    );
     if (value !== null && this.editHistory.length === 0) {
       this.editHistory.push(this.textArea.nativeElement.innerHTML);
       this.currentHistoryIndex = 0;
@@ -469,7 +525,6 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     if (!value) {
       this.r.addClass(this.editorWrapper.nativeElement, 'show-placeholder');
       this.showPlaceholder = true;
-
     } else {
       this.r.removeClass(this.editorWrapper.nativeElement, 'show-placeholder');
       this.showPlaceholder = false;
@@ -516,8 +571,12 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       this.r.setStyle(oCode, 'background-color', '#fff5b9');
       this.r.setProperty(oCode, 'contentEditable', true);
       this.r.appendChild(oCode, oContent);
-      this.focusInstance = this.r.listen(oCode, 'focus', (event) => this.onTextAreaFocus(event));
-      this.blurInstance = this.r.listen(oCode, 'blur', (event) => this.onTextAreaBlur(event));
+      this.focusInstance = this.r.listen(oCode, 'focus', (event) =>
+        this.onTextAreaFocus(event),
+      );
+      this.blurInstance = this.r.listen(oCode, 'blur', (event) =>
+        this.onTextAreaBlur(event),
+      );
       this.r.appendChild(oPre, oCode);
       this.r.appendChild(editableElement, oPre);
 
@@ -528,8 +587,12 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
       this.viewMode.emit(false);
       oCode.focus();
     } else {
-      if (this.doc.querySelectorAll) {
-        this.r.setProperty(editableElement, 'innerHTML', editableElement.innerText);
+      if (this.doc['querySelectorAll']) {
+        this.r.setProperty(
+          editableElement,
+          'innerHTML',
+          editableElement.innerText,
+        );
       } else {
         oContent = this.doc.createRange();
         oContent.selectNodeContents(editableElement.firstChild);
@@ -546,16 +609,24 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   textPatternCheck() {
     if (!this.modeVisual) return;
-    const selection = this.doc.getSelection();
-    const txtData = selection.anchorNode.textContent;
+    const selection = this.doc.getSelection() as Selection;
+    const txtData = selection.anchorNode?.textContent;
     const textPatternsMap = {
-      '1.': { command: 'insertOrderedList', offsets: [3], },
-      '*': { command: 'insertUnorderedList', offsets: [2], },
-      '>': { command: () => this.editorService.createCustomClass({ name:'quote', class: 'quote' }), offsets: [2], },
+      '1.': { command: 'insertOrderedList', offsets: [3] },
+      '*': { command: 'insertUnorderedList', offsets: [2] },
+      '>': {
+        command: () =>
+          this.editorService.createCustomClass({
+            name: 'quote',
+            class: 'angular-editor-quote',
+          }),
+        offsets: [2],
+      },
     };
-    const patternDetected = textPatternsMap[txtData.trim()];
-    if (patternDetected && 
-      patternDetected.command && 
+    const patternDetected = textPatternsMap[txtData ? txtData.trim() : ''];
+    if (
+      patternDetected &&
+      patternDetected.command &&
       patternDetected.offsets?.includes(selection.anchorOffset)
     ) {
       if (typeof patternDetected.command == 'string') {
@@ -584,7 +655,7 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
    *
    * Send a node array from the contentEditable of the editor
    */
-  exec($event = null) {
+  exec($event: KeyboardEvent | any | null = null) {
     if ($event && ($event.key === 'Delete' || $event.key === 'Backspace')) {
       if (this.currentSelectedImage) {
         this.onContentChange(this.textArea.nativeElement);
@@ -599,11 +670,13 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
     let userSelection;
     if (this.doc.getSelection) {
       userSelection = this.doc.getSelection();
-      this.editorService.executeInNextQueueIteration(this.editorService.saveSelection);
+      this.editorService.executeInNextQueueIteration(
+        this.editorService.saveSelection,
+      );
     }
 
     let a = userSelection.focusNode;
-    const els = [];
+    const els = [] as any[];
     while (a && a.id !== 'editor') {
       els.unshift(a);
       a = a.parentNode;
@@ -616,9 +689,12 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
 
   private configure() {
     this.editorService.uploadUrl = this.config.uploadUrl;
-    this.editorService.uploadWithCredentials = this.config.uploadWithCredentials;
+    this.editorService.uploadWithCredentials =
+      this.config.uploadWithCredentials;
     if (this.config.defaultParagraphSeparator) {
-      this.editorService.setDefaultParagraphSeparator(this.config.defaultParagraphSeparator);
+      this.editorService.setDefaultParagraphSeparator(
+        this.config.defaultParagraphSeparator,
+      );
     }
     if (this.config.defaultFontName) {
       this.editorService.setFontName(this.config.defaultFontName);
@@ -629,15 +705,17 @@ export class AngularEditorComponent implements OnInit, ControlValueAccessor, Aft
   }
 
   getFonts() {
-    const fonts = this.config.fonts ? this.config.fonts : angularEditorConfig.fonts;
-    return fonts.map(x => {
-      return {label: x.name, value: x.name};
+    const fonts = this.config.fonts
+      ? this.config.fonts
+      : angularEditorConfig.fonts;
+    return fonts?.map((x) => {
+      return { label: x.name, value: x.name };
     });
   }
 
   getCustomTags() {
     const tags = ['span'];
-    this.config.customClasses.forEach(x => {
+    this.config.customClasses?.forEach((x) => {
       if (x.tag !== undefined) {
         if (!tags.includes(x.tag)) {
           tags.push(x.tag);

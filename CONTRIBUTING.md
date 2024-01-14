@@ -1,75 +1,106 @@
+# Contributing to @wfpena/angular-wysiwyg
 
-<!-- # Report an Issue
+Thank you for considering contributing to the Angular WYSIWYG project! Contributions are essential for improving the project and making it more robust.
 
-Help us make AngularEditor better! If you think you might have found a bug, or some other weirdness, start by making sure
-it hasn't already been reported. You can [search through existing @wfpena/angular-editor issues](https://github.com/wfpena/angular-wysiwyg/issues)
-to see if someone's reported one similar to yours.
+## How to Contribute
 
-If not, then [create a plunkr](http://bit.ly/UIR-Plunk) that demonstrates the problem (try to use as little code
-as possible: the more minimalist, the faster we can debug it).
+### Reporting Issues
 
-Next, [create a new issue](https://github.com/wfpena/angular-wysiwyg/issues/new) that briefly explains the problem,
-and provides a bit of background as to the circumstances that triggered it. Don't forget to include the link to
-that plunkr you created!
+If you encounter a bug or have a suggestion, please open an issue on the GitHub repository. Provide a clear and detailed description of the issue, including steps to reproduce it. If possible, include screenshots or code snippets that demonstrate the problem.
 
-**Note**: If you're unsure how a feature is used, or are encountering some unexpected behavior that you aren't sure
-is a bug, it's best to talk it out on
-[StackOverflow](http://stackoverflow.com/questions/ask?tags=angular,@wfpena/angular-editor) before reporting it. This
-keeps development streamlined, and helps us focus on building great software.
+You can help make this project better by submitting issues and feature ideas on the [repo issues page](https://github.com/wfpena/angular-wysiwyg/issues).
 
 
-Issues only! |
--------------|
-Please keep in mind that the issue tracker is for *issues*. Please do *not* post an issue if you need help or support. Instead, use StackOverflow. |
+### Pull Requests
 
-# Contribute
+We welcome contributions in the form of pull requests. To submit a pull request:
 
-**(1)** See the **[Developing](#developing)** section below, to get the development version of AngularEditor up and running on your local machine.
+1. **Fork the repository.**
+2. **Clone your fork to your local machine:**
 
-**(2)** Check out the [roadmap](https://github.com/wfpena/angular-editor/milestones) to see where the project is headed, and if your feature idea fits with where we're headed.
+   ```bash
+   git clone https://github.com/your-username/angular-wysiwyg.git
+	```
+3. **Create a new branch for your changes:**
+   ```bash
+   git checkout -b feature-or-fix-branch
+   ```
+4. **Make your changes and commit them:**
+   ```bash
+   git commit -m "Your descriptive commit message"
+   ```
+5. **Push your changes to your fork:**
+   ```bash
+   git push origin feature-or-fix-branch
+   ```
+6. **Open a pull request on the GitHub repository.**
 
-**(3)** If you're not sure, [open an RFC](https://github.com/wfpena/angular-wysiwyg/issues/new?title=RFC:%20My%20idea) to get some feedback on your idea.
+### Development Setup
 
-**(4)** Finally, commit some code and open a pull request. Code & commits should abide by the following rules:
+To set up the project for local development:
 
-- *Always* have test coverage for new features (or regression tests for bug fixes), and *never* break existing tests
-- Commits should represent one logical change each; if a feature goes through multiple iterations, squash your commits down to one
-- Make sure to follow the [Angular commit message format](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format) so your change will appear in the changelog of the next release.
-- Changes should always respect the coding style of the project
+1. **Install dependencies:**
+   ```bash
+   yarn install
+   ```
+2. **Run the development server:**
+   ```bash
+   yarn start
+   ```
+3. **Open your browser and navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.**
 
+## Running tests
 
+### Cypress E2E test:
 
-# Developing
+* **To run cypress with the interface**:
 
-`angular-editor` uses <code>Angular cli</code>, <code>npm</code> and <code>webpack</code>.
-
-## Fetch the source code
-
-The code for `angular-editor` is :
-
-* [AngularEditor](https://github.com/wfpena/angular-editor) (`@wfpena/angular-editor` on npm)
-
-Clone repository.
-
-```
-mkdir angular-editor
-cd angular-editor
-git clone https://github.com/wfpena/angular-editor.git
-```
-
-## Install dependencies
-
-Use `npm` to install the development dependencies for the repository.
-
-```
-cd angular-editor
-npm install
+```bash
+yarn cypress:open:app
 ```
 
-After executing these steps, your local copy of `@wfpena/angular-editor-app` will be built using your local copy of `@wfpena/angular-editor`
-instead of the prebuilt version specified in `package.json`.
+> :info:
+> Its set on `package.json` to run on chrome by default.
+> If you want to change the default browser (or change browsers through the interface) alter the `cypress:open:app` command on `package.json`
 
-## Develop
+```json
+"cypress:open:app": "ng run angular-editor-app:cypress-open --browser chrome",
+```
 
-* `npm run build and watch angular-editor`: Continuously builds the `@wfpena/angular-editor` code when sources change.
-* `npm run start`: Continuously builds and runs Demo app when source or tests change. -->
+* **To run cypress with the interface:**
+
+```bash
+yarn cypress:run:app
+```
+
+### Unit tests:
+
+* Testing the lib:
+
+```bash
+yarn test:lib
+```
+
+* Testing with the demo app:
+
+```bash
+yarn test
+```
+
+### Coding Guidelines
+
+Please follow the existing coding style and conventions used in the project. If you are adding new features or modifying existing ones, make sure to include appropriate tests.
+
+### Commit Messages
+
+Write clear and descriptive commit messages that explain the purpose of your changes. Follow the conventional commit format, such as:
+- `feat: add new feature`
+- `fix: resolve a bug`
+- `chore: make a maintenance change`
+- `refactor: refactoring or improving code`
+
+## Thank You!
+
+Your contributions are valuable, and we appreciate your efforts in making Angular WYSIWYG even better!
+
+Happy coding!

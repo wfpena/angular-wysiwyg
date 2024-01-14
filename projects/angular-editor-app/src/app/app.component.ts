@@ -1,13 +1,16 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularEditorConfig, UploadResponse, angularEditorConfig } from '../../../angular-editor/src/public-api';
-
+import {
+  AngularEditorConfig,
+  UploadResponse,
+  angularEditorConfig,
+} from '../../../angular-editor/src/public-api';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'angular-wysiwyg-app';
@@ -35,11 +38,11 @@ export class AppComponent implements OnInit {
     customClasses: [
       {
         name: 'quote',
-        class: 'quote',
+        class: 'angular-editor-quote',
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
@@ -87,36 +90,39 @@ export class AppComponent implements OnInit {
     customClasses: [
       {
         name: 'quote',
-        class: 'quote',
+        class: 'angular-editor-quote',
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
         class: 'titleText',
         tag: 'h1',
       },
-    ]
+    ],
   };
 
   config3 = {
     ...this.config1,
-    ...angularEditorConfig
-  }
+    ...angularEditorConfig,
+  };
 
   config4 = {
     ...this.config1,
     ...angularEditorConfig,
     minHeight: '150px',
-  }
+  };
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      signature: ['', Validators.required]
+      signature: ['', Validators.required],
     });
   }
 
@@ -132,8 +138,7 @@ export class AppComponent implements OnInit {
     console.warn(this.form.value);
   }
 
-  onChange3(event) {
-  }
+  onChange3(event) {}
 
   isObject(val) {
     if (typeof val == 'object') return true;
