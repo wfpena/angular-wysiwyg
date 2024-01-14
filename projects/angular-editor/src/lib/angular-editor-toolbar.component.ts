@@ -6,14 +6,15 @@ import {
   Inject,
   Input,
   Output,
-  Renderer2, TemplateRef,
-  ViewChild
+  Renderer2,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
-import {AngularEditorService, UploadResponse} from './angular-editor.service';
-import {HttpResponse, HttpEvent} from '@angular/common/http';
-import {DOCUMENT} from '@angular/common';
-import {CustomClass} from './config';
-import {SelectOption} from './ae-select/ae-select.component';
+import { AngularEditorService, UploadResponse } from './angular-editor.service';
+import { HttpResponse, HttpEvent } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { CustomClass } from './config';
+import { SelectOption } from './ae-select/ae-select.component';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -65,16 +66,16 @@ export class AngularEditorToolbarComponent {
     },
     {
       label: 'Predefined',
-      value: 'pre'
+      value: 'pre',
     },
     {
       label: 'Standard',
-      value: 'div'
+      value: 'div',
     },
     {
       label: 'default',
-      value: 'default'
-    }
+      value: 'default',
+    },
   ];
 
   fontSizes: SelectOption[] = [
@@ -105,37 +106,53 @@ export class AngularEditorToolbarComponent {
     {
       label: '7',
       value: '7',
-    }
+    },
   ];
 
   customClassId = '-1';
-  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   _customClasses: CustomClass[];
-  customClassList: SelectOption[] = [{label: '', value: ''}];
-  // uploadUrl: string;
+  customClassList: SelectOption[] = [{ label: '', value: '' }];
 
   tagMap = {
     BLOCKQUOTE: 'indent',
-    A: 'link'
+    A: 'link',
   };
 
   select = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'PRE', 'DIV'];
 
-  buttons = ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'justifyLeft', 'justifyCenter',
-    'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'link'];
+  buttons = [
+    'bold',
+    'italic',
+    'underline',
+    'strikeThrough',
+    'subscript',
+    'superscript',
+    'justifyLeft',
+    'justifyCenter',
+    'justifyRight',
+    'justifyFull',
+    'indent',
+    'outdent',
+    'insertUnorderedList',
+    'insertOrderedList',
+    'link',
+  ];
 
   @Input() id: string;
   @Input() uploadUrl: string;
   @Input() upload: (file: File) => Observable<HttpEvent<UploadResponse>>;
   @Input() showToolbar: boolean;
-  @Input() fonts: SelectOption[] = [{label: '', value: ''}];
+  @Input() fonts: SelectOption[] = [{ label: '', value: '' }];
 
   @Input()
   set customClasses(classes: CustomClass[]) {
     if (classes) {
       this._customClasses = classes;
-      this.customClassList = this._customClasses.map((x, i) => ({label: x.name, value: i.toString()}));
-      this.customClassList.unshift({label: 'Clear Class', value: '-1'});
+      this.customClassList = this._customClasses.map((x, i) => ({
+        label: x.name,
+        value: i.toString(),
+      }));
+      this.customClassList.unshift({ label: 'Clear Class', value: '-1' });
     }
   }
 
@@ -157,7 +174,7 @@ export class AngularEditorToolbarComponent {
 
   @Output() execute: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild('fileInput', {static: true}) myInputFile: ElementRef;
+  @ViewChild('fileInput', { static: true }) myInputFile: ElementRef;
 
   public get isLinkButtonDisabled(): boolean {
     return this.htmlMode || !Boolean(this.editorService.selectedText);
@@ -167,9 +184,9 @@ export class AngularEditorToolbarComponent {
     private r: Renderer2,
     private editorService: AngularEditorService,
     private er: ElementRef,
-    @Inject(DOCUMENT) private doc: any
-  ) {
-  }
+    // @ts-ignore
+    @Inject(DOCUMENT) private doc: any,
+  ) {}
 
   /**
    * Trigger command from editor header buttons
@@ -186,7 +203,7 @@ export class AngularEditorToolbarComponent {
     if (!this.showToolbar) {
       return;
     }
-    this.buttons.forEach(e => {
+    this.buttons.forEach((e) => {
       const result = this.doc.queryCommandState(e);
       const elementById = this.doc.getElementById(e + '-' + this.id);
       if (result) {
@@ -204,10 +221,10 @@ export class AngularEditorToolbarComponent {
     if (!this.showToolbar) {
       return;
     }
-    this.linkSelected = nodes.findIndex(x => x.nodeName === 'A') > -1;
+    this.linkSelected = nodes.findIndex((x) => x.nodeName === 'A') > -1;
     let found = false;
-    this.select.forEach(y => {
-      const node = nodes.find(x => x.nodeName === y);
+    this.select.forEach((y) => {
+      const node = nodes.find((x) => x.nodeName === y);
       if (node !== undefined && y === node.nodeName) {
         if (found === false) {
           this.block = node.nodeName.toLowerCase();
@@ -221,7 +238,7 @@ export class AngularEditorToolbarComponent {
     found = false;
     if (this._customClasses) {
       this._customClasses.forEach((y, index) => {
-        const node = nodes.find(x => {
+        const node = nodes.find((x) => {
           if (x instanceof Element) {
             return x.className === y.class;
           }
@@ -237,9 +254,11 @@ export class AngularEditorToolbarComponent {
       });
     }
 
-    Object.keys(this.tagMap).map(e => {
-      const elementById = this.doc.getElementById(this.tagMap[e] + '-' + this.id);
-      const node = nodes.find(x => x.nodeName === e);
+    Object.keys(this.tagMap).map((e) => {
+      const elementById = this.doc.getElementById(
+        this.tagMap[e] + '-' + this.id,
+      );
+      const node = nodes.find((x) => x.nodeName === e);
       if (node !== undefined && e === node.nodeName) {
         this.r.addClass(elementById, 'active');
       } else {
@@ -257,10 +276,14 @@ export class AngularEditorToolbarComponent {
    * insert URL link
    */
   insertUrl() {
-    let url = 'https:\/\/';
+    let url: string | null = 'https://';
     const selection = this.editorService.savedSelection;
-    if (selection && selection.commonAncestorContainer.parentElement.nodeName === 'A') {
-      const parent = selection.commonAncestorContainer.parentElement as HTMLAnchorElement;
+    if (
+      selection &&
+      selection.commonAncestorContainer?.parentElement?.nodeName === 'A'
+    ) {
+      const parent = selection.commonAncestorContainer
+        .parentElement as HTMLAnchorElement;
       if (parent.href !== '') {
         url = parent.href;
       }
@@ -311,7 +334,9 @@ export class AngularEditorToolbarComponent {
    * @param m boolean
    */
   setEditorMode(m: boolean) {
-    const toggleEditorModeButton = this.doc.getElementById('toggleEditorMode' + '-' + this.id);
+    const toggleEditorModeButton = this.doc.getElementById(
+      'toggleEditorMode' + '-' + this.id,
+    );
     if (m) {
       this.r.addClass(toggleEditorModeButton, 'active');
     } else {
@@ -326,22 +351,39 @@ export class AngularEditorToolbarComponent {
   onFileChanged(event) {
     const file = event.target.files[0];
     if (file.type.includes('image/')) {
-        if (this.upload) {
-          this.upload(file).subscribe((response: HttpResponse<UploadResponse>) => this.watchUploadImage(response, event));
-        } else if (this.uploadUrl) {
-            this.editorService.uploadImage(file).subscribe((response: HttpResponse<UploadResponse>) => this.watchUploadImage(response, event));
-        } else {
-          const reader = new FileReader();
-          reader.onload = (e: ProgressEvent) => {
-            const fr = e.currentTarget as FileReader;
-            this.editorService.insertImage(fr.result.toString());
-          };
-          reader.readAsDataURL(file);
-        }
+      if (this.upload) {
+        this.upload(file).subscribe((response: HttpResponse<UploadResponse>) =>
+          this.watchUploadImage(response, event),
+        );
+      } else if (this.uploadUrl) {
+        this.editorService
+          .uploadImage(file)
+          .subscribe((response: HttpResponse<UploadResponse>) =>
+            this.watchUploadImage(response, event),
+          );
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent) => {
+          const fr = e.currentTarget as FileReader;
+          if (!fr || !fr.result) {
+            console.error(`No file selected.`);
+            return;
+          }
+          this.editorService.insertImage(fr.result.toString());
+        };
+        reader.readAsDataURL(file);
       }
+    }
   }
 
-  watchUploadImage(response: HttpResponse<{imageUrl: string}>, event) {
+  watchUploadImage(response: HttpResponse<{ imageUrl: string }>, event) {
+    if (!response?.body?.imageUrl) {
+      console.error(
+        `Request body is empty or imageUrl property is not on the response`,
+        response,
+      );
+      return;
+    }
     const { imageUrl } = response.body;
     this.editorService.insertImage(imageUrl);
     event.srcElement.value = null;
@@ -368,7 +410,7 @@ export class AngularEditorToolbarComponent {
     let result: any;
     for (const arr of this.hiddenButtons) {
       if (arr instanceof Array) {
-        result = arr.find(item => item === name);
+        result = arr.find((item) => item === name);
       }
       if (result) {
         break;
@@ -379,6 +421,5 @@ export class AngularEditorToolbarComponent {
 
   focus() {
     this.execute.emit('focus');
-    console.log('focused');
   }
 }

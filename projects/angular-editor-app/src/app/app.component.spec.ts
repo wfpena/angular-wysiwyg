@@ -5,10 +5,8 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-      imports: [HttpClientModule]
+      declarations: [AppComponent],
+      imports: [HttpClientModule],
     }).compileComponents();
   }));
 
@@ -29,6 +27,8 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h2').textContent).toContain('Basic Example with HTML Output');
+    expect(compiled.querySelector('h2').textContent).toContain(
+      'Basic Example with HTML Output',
+    );
   });
 });

@@ -1,5 +1,10 @@
-import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
-
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 
 @Component({
   selector: 'ae-button',
@@ -8,11 +13,9 @@ import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angula
   encapsulation: ViewEncapsulation.None,
 })
 export class AeButtonComponent {
-
   @Input() iconClass = '';
   @Input() title = '';
   @Output() buttonClick = new EventEmitter();
 
-  constructor() { }
-
+  constructor() {}
 }

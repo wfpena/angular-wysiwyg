@@ -18,6 +18,10 @@ Easy to use and customize.
 
 ## Installation
 
+
+> :warning:
+> For version >=1.0.7 its a requirement to use node version >=18.18.2 because of the `eslint` dependencies.
+
 Using npm:
 > npm install @wfpena/angular-wysiwyg
 
@@ -58,7 +62,7 @@ Also, you can use multiple `angular-editor` components on the same page by passi
 
 |Name|Example Value|
 |--- |--- |
-|customClasses|`[{"name": "quote","class": "quote"}]`|
+|customClasses|`[{"name": "quote","class": "angular-editor-quote"}]`|
 |defaultFontName||
 |defaultFontSize|5|
 |defaultParagraphSeparator||
@@ -85,6 +89,4 @@ Also, you can use multiple `angular-editor` components on the same page by passi
 ## Report Issues and Feature ideas
 
 You can help make this project better by submitting issues and feature ideas on the [repo issues page](https://github.com/wfpena/angular-wysiwyg/issues).
-
-## TODO
 

@@ -8,9 +8,8 @@ describe('AeToolbarSetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AeToolbarSetComponent ]
-    })
-    .compileComponents();
+      declarations: [AeToolbarSetComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

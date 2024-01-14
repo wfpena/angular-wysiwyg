@@ -10,19 +10,18 @@ describe('AeSelectComponent', () => {
   const testOptions: SelectOption[] = [
     {
       label: 'test label1',
-      value: 'test value1'
+      value: 'test value1',
     },
     {
       label: 'test label2',
-      value: 'test value2'
-    }
+      value: 'test value2',
+    },
   ];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AeSelectComponent ]
-    })
-      .compileComponents();
+      declarations: [AeSelectComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -86,7 +85,9 @@ describe('AeSelectComponent', () => {
     const setValue = spyOn(component, 'setValue').and.callFake(() => {});
     const onChange = spyOn(component, 'onChange').and.callFake(() => {});
     const onTouched = spyOn(component, 'onTouched');
-    const changeEvent = spyOn(component.changeEvent, 'emit').and.callFake(() => {});
+    const changeEvent = spyOn(component.changeEvent, 'emit').and.callFake(
+      () => {},
+    );
 
     component.opened = true;
 
@@ -101,5 +102,4 @@ describe('AeSelectComponent', () => {
     expect(changeEvent).toHaveBeenCalledWith(testOptions[1].value);
     expect(component.opened).toBe(false);
   });
-
 });

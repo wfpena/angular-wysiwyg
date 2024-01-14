@@ -1,0 +1,30 @@
+name: Lint and Format Check
+
+on:
+  push:
+    branches:
+      - "*"
+
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.yarnpkg.com/
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Lint and Format Check
+        run: yarn lint && yarn format:check

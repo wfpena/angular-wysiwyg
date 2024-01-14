@@ -1,11 +1,10 @@
-import {async, ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {AngularEditorComponent} from './angular-editor.component';
-import {AngularEditorToolbarComponent} from './angular-editor-toolbar.component';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {AeSelectComponent} from './ae-select/ae-select.component';
-import {AngularEditorModule} from './angular-editor.module';
+import { AngularEditorComponent } from './angular-editor.component';
+import { AngularEditorToolbarComponent } from './angular-editor-toolbar.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AeSelectComponent } from './ae-select/ae-select.component';
 
 describe('AngularEditorComponent', () => {
   let component: AngularEditorComponent;
@@ -13,10 +12,13 @@ describe('AngularEditorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule, HttpClientModule],
-      declarations: [AngularEditorComponent, AngularEditorToolbarComponent, AeSelectComponent]
-    })
-      .compileComponents();
+      imports: [FormsModule, HttpClientModule],
+      declarations: [
+        AngularEditorComponent,
+        AngularEditorToolbarComponent,
+        AeSelectComponent,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -36,11 +38,11 @@ describe('AngularEditorComponent', () => {
 
     const dataTransfer = new DataTransfer();
 
-    const clipboardEvent = new ClipboardEvent("paste", {
+    const clipboardEvent = new ClipboardEvent('paste', {
       clipboardData: dataTransfer,
     });
-    clipboardEvent.clipboardData.setData("text/plain", rawText);
-    clipboardEvent.clipboardData.setData("text/html", htmlText);
+    clipboardEvent.clipboardData?.setData('text/plain', rawText);
+    clipboardEvent.clipboardData?.setData('text/html', htmlText);
 
     const outputRawText = component.onPaste(clipboardEvent);
 

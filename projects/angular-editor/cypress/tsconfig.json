@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.e2e.json",
   "include": ["**/*.ts"],
   "compilerOptions": {
     "sourceMap": false,

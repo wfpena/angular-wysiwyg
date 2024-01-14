@@ -1,0 +1,50 @@
+# Ignore artifacts and build directories
+build/
+dist/
+coverage/
+
+# Ignore compiled files
+*.min.js
+*.min.css
+*.map
+
+# Ignore certain file types
+*.png
+*.jpg
+*.gif
+*.ico
+*.yml
+*.yaml
+
+# Ignore config files
+.eslintrc
+.prettierrc
+.editorconfig
+.browserslistrc
+.prettierignore
+.gitignore
+.eslintignore
+
+# Ignore version control directories
+.git/
+.hg/
+.svn/
+
+# Ignore node_modules (add this if your project uses Node.js)
+node_modules/
+
+# Other files
+*.json
+*.md
+yarn.lock
+*.html
+*.scss
+*.svg
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+LICENSE
