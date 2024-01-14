@@ -1,12 +1,11 @@
 name: Unit Tests
 
 on:
-  push: # Only on commits to the main branch
+  push:
     branches:
-      - main
       - "*"
 
-  pull_request: # Every commit on opened PRs
+  pull_request:
     branches:
       - "*"
 
