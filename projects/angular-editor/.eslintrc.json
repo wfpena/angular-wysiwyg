@@ -13,7 +13,8 @@
           "projects/angular-editor/tsconfig.lib.json",
           "projects/angular-editor/tsconfig.lib.prod.json",
           "projects/angular-editor/tsconfig.spec.json",
-          "projects/angular-editor/tsconfig.e2e.json"
+          "projects/angular-editor/tsconfig.e2e.json",
+          "projects/angular-editor/cypress/tsconfig.json"
         ],
         "createDefaultProgram": true
       },

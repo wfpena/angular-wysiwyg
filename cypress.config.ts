@@ -6,5 +6,4 @@ export default defineConfig({
       // implement node event listeners here
     },
   },
-  // projectId: 'angular-editor-app'
 });

@@ -28,7 +28,6 @@
     }
   },
   "exclude": [
-    "cypress.config.ts",
     "cypress/**/*.ts",
     "**/*.spec.ts"
   ]
