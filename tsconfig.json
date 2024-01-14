@@ -8,6 +8,7 @@
     "module": "es2022",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "importHelpers": true,
     "target": "es2022",
     "typeRoots": [
@@ -26,6 +27,9 @@
       ]
     }
   },
-  "exclude": ["cypress.config.ts"],
-  "files": ["cypress.config.ts"]
+  "exclude": [
+    "cypress.config.ts",
+    "cypress/**/*.ts",
+    "**/*.spec.ts"
+  ]
 }

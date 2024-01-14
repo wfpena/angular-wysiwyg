@@ -60,7 +60,8 @@
           "options": {
             "watch": true,
             "headless": false,
-            "configFile": "projects/angular-editor/cypress.config.ts"
+            "configFile": "projects/angular-editor/cypress.config.ts",
+            "tsConfig": "projects/angular-editor/tsconfig.e2e.json"
           }
         },
         "ct": {

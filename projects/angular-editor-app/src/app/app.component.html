@@ -25,7 +25,7 @@
     Form Value: {{ form.value.signature }}
   </p>
   <p>
-    Form Status: <span [style.color]="form.status == 'INVALID' ? 'red': 'green'"><b>{{ form.status }}</b></span>
+    Form Status: <span [style.color]="form.status === 'INVALID' ? 'red': 'green'"><b>{{ form.status }}</b></span>
   </p>
   <br>
   <br>
