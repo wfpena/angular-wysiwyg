@@ -308,4 +308,39 @@ export class AngularEditorService {
       }
     });
   }
+
+  getInnerTextFromNode(node: HTMLElement): string | null {
+    if (!node) return null;
+    if (node.innerText) {
+      return node.innerText;
+    }
+    const text = [];
+    for (let child of Array.from(node.childNodes)) {
+      text.push(child.textContent);
+    }
+    return text.join('');
+  }
+
+  getInnerHTMLFromNode(node: HTMLElement): string | null {
+    if (!node) return null;
+    if (node.innerHTML) {
+      return node.innerHTML;
+    }
+    let combinedInnerHTML = '';
+    for (let i = 0; i < node.childNodes.length; i++) {
+      const childNode = node.childNodes[i] as HTMLElement;
+      if (childNode.nodeType === 1) {
+        combinedInnerHTML += childNode.innerHTML;
+      }
+    }
+    return combinedInnerHTML;
+  }
+
+  getFirstParentWithProperty(node: any, className: string) {
+    if (!node) return null;
+    if (node.classList?.contains(className)) {
+      return node;
+    }
+    return this.getFirstParentWithProperty(node.parentNode, className);
+  }
 }
