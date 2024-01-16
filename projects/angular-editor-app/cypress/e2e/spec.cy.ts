@@ -15,6 +15,16 @@ describe('My First Test', () => {
       .should('contain', '<div class="angular-editor-quote">');
   });
 
+  it('Should apply italic using Ctrl + I command on highlighted text', () => {
+    cy.visit('/');
+    const editor1 = cy.get('#editor1');
+    editor1.click();
+    editor1.type('> Hello World');
+    editor1.scrollIntoView();
+    editor1.selectText(0, 10);
+    editor1.scrollIntoView();
+  });
+
   it('Checks for text pattern and insert quote', () => {
     cy.visit('/');
     const editor1 = cy.get('#editor1');
@@ -57,9 +67,13 @@ describe('My First Test', () => {
     cy.get('#html-content-editor1')
       .invoke('text')
       .should('contain', '<div class="angular-editor-quote">');
+    editor1.type('{enter}');
+    cy.get('#html-content-editor1').then((t) =>
+      expect(t.text()).to.match(/<br>$/),
+    );
     editor1.type('{enter}{enter}');
     cy.get('#html-content-editor1').then((t) =>
-      expect(new RegExp('<br><br>$').test(t.text())).equals(true),
+      expect(t.text()).to.match(/<div><br><\/div>$/),
     );
   });
 
