@@ -301,18 +301,34 @@ export class AngularEditorComponent
   handleEnter(e) {
     const sel = this.doc.getSelection() as Selection;
     const focusNode = sel.focusNode as Node & HTMLElement & any;
-    if (
-      focusNode &&
-      focusNode.previousSibling &&
-      (focusNode.classList?.contains('angular-editor-quote') ||
-        focusNode.classList?.contains('quote'))
-    ) {
+    const quoteParent = this.editorService.getFirstParentWithProperty(
+      focusNode,
+      'angular-editor-quote',
+    );
+    if (quoteParent && quoteParent.previousSibling) {
       if (
-        focusNode.innerHTML === '<br>' &&
-        focusNode.previousSibling.innerHTML === '<br>'
+        quoteParent.innerHTML === '<br>' &&
+        quoteParent.previousSibling?.innerHTML === '<br>'
       ) {
-        this.editorService.replaceWithOwnChildren(focusNode.previousSibling);
-        this.editorService.replaceWithOwnChildren(focusNode);
+        this.editorService.replaceWithOwnChildren(quoteParent.previousSibling);
+        this.editorService.replaceWithOwnChildren(quoteParent);
+        this.onContentChange(this.textArea.nativeElement, false);
+        return;
+      }
+      const previousSibling = quoteParent.previousSibling;
+      if (!previousSibling?.classList?.contains('angular-editor-quote')) {
+        return;
+      }
+      const previousSiblingInnerText = this.editorService
+        .getInnerTextFromNode(previousSibling)
+        ?.trim();
+      if (!previousSiblingInnerText || previousSiblingInnerText.length < 1) {
+        this.editorService.replaceWithOwnChildren(quoteParent.previousSibling);
+        const quoteParentInnerText =
+          this.editorService.getInnerTextFromNode(quoteParent);
+        if (!quoteParentInnerText?.trim()) {
+          this.editorService.replaceWithOwnChildren(quoteParent);
+        }
         this.onContentChange(this.textArea.nativeElement, false);
       }
     }
