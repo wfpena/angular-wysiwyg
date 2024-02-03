@@ -10,7 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.json"
+          "tsconfig.json",
+          "tsconfig.e2e.json"
         ],
         "createDefaultProgram": true
       },

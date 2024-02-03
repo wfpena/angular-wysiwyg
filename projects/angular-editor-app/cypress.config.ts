@@ -13,4 +13,5 @@ export default defineConfig({
     },
     specPattern: '**/*.cy.ts',
   },
+  supportFolder: './cypress/support',
 });

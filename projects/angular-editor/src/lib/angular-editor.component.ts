@@ -451,6 +451,9 @@ export class AngularEditorComponent
    */
   onContentChange(element: any, addChangeToHistory = true): void {
     let html = '';
+    if (this.editorService.currentFontName) {
+      this.editorService.setFontName(this.editorService.currentFontName);
+    }
     if (this.modeVisual) {
       html = element.innerHTML;
     } else {
