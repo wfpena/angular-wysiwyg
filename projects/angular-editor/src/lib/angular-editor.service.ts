@@ -14,6 +14,7 @@ export class AngularEditorService {
   selectedText: string;
   uploadUrl?: string;
   uploadWithCredentials?: boolean;
+  currentFontName: string;
 
   constructor(
     private http: HttpClient,
@@ -72,6 +73,7 @@ export class AngularEditorService {
    */
   setFontName(fontName: string) {
     this.doc.execCommand('fontName', false, fontName);
+    this.currentFontName = fontName;
   }
 
   /**

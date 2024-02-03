@@ -3,18 +3,6 @@
 // with Intellisense and code completion in your
 // IDE or Text Editor.
 // ***********************************************
-// declare namespace Cypress {
-//   interface Chainable<Subject = any> {
-//     customCommand(param: any): typeof customCommand;
-//   }
-// }
-//
-// function customCommand(param: any): void {
-//   console.warn(param);
-// }
-//
-// NOTE: You can use it like so:
-// Cypress.Commands.add('customCommand', customCommand);
 //
 // ***********************************************
 // This example commands.js shows you how to
@@ -32,12 +20,19 @@
 //
 //
 // -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+// eslint-disable-next-line prettier/prettier
+// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { return; })
 //
 //
 // -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
+// Cypress.Commands.add(
+//   'selectText',
+//   { prevSubject: 'element' },
+//   (subject, startIndex, endIndex) => {},
+// );
 //
 //
 // -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+// Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+//   return;
+// });
