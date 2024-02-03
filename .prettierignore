@@ -48,3 +48,6 @@ yarn.lock
 .DS_Store
 
 LICENSE
+
+docs/
+postDemoBuild.js
