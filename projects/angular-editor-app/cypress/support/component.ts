@@ -29,6 +29,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       mount: typeof mount;
+      selectText(startIndex: number, endIndex: number): Chainable<string>;
     }
   }
 }

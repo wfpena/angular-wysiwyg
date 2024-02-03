@@ -35,3 +35,34 @@
 //     }
 //   }
 // }
+declare namespace Cypress {
+  interface Chainable<Subject = any> {
+    selectText(startIndex: number, endIndex: number): Chainable<string>;
+  }
+}
+
+Cypress.Commands.add(
+  'selectText',
+  { prevSubject: 'element' },
+  (subject, startIndex, endIndex) => {
+    const text = subject.text();
+    const selectedText = text.substring(startIndex, endIndex);
+
+    cy.document().then((document) => {
+      const range = document.createRange();
+      const textNode = subject.contents().get(0);
+      console.log('text: ', textNode);
+      // range.selectNodeContents(textNode);
+      range.setStart(textNode, startIndex);
+      range.setEnd(textNode, endIndex);
+
+      const selection = document.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      return cy.wrap(selectedText);
+    });
+  },
+);

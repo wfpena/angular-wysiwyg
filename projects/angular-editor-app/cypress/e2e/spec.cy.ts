@@ -15,14 +15,50 @@ describe('My First Test', () => {
       .should('contain', '<div class="angular-editor-quote">');
   });
 
-  it('Should apply italic using Ctrl + I command on highlighted text', () => {
+  it('Should apply italic command on highlighted text', () => {
     cy.visit('/');
-    const editor1 = cy.get('#editor1');
-    editor1.click();
-    editor1.type('> Hello World');
-    editor1.scrollIntoView();
-    editor1.selectText(0, 10);
-    editor1.scrollIntoView();
+    const editor1Chain = cy.get('#editor1');
+    editor1Chain.click();
+    editor1Chain.type('> Hello World');
+    editor1Chain.scrollIntoView();
+    const quoteChain = cy.get('.angular-editor-quote');
+    const selectedTextChain = quoteChain.selectText(0, 12);
+    selectedTextChain.should('have.string', 'Hello World');
+    cy.window()
+      .then((win) => win.getSelection().toString().trim())
+      .should('equal', 'Hello World');
+    const italicBtnChain = cy.get('.fa.fa-italic').first();
+    italicBtnChain.click();
+    const editor1HTMLContentChain = cy.get('#html-content-editor1');
+    editor1HTMLContentChain.should('contain.text', '<i>&nbsp;Hello World</i>');
+  });
+
+  it('Should undo italic command on highlighted text', () => {
+    cy.visit('/');
+    const editor1Chain = cy.get('#editor1');
+    editor1Chain.click();
+    editor1Chain.type('> Hello World');
+    editor1Chain.scrollIntoView();
+    let quoteChain = cy.get('.angular-editor-quote');
+    let selectedTextChain = quoteChain.selectText(0, 12);
+    selectedTextChain.should('have.string', 'Hello World');
+    cy.window()
+      .then((win) => win.getSelection().toString().trim())
+      .should('equal', 'Hello World');
+    let italicBtnChain = cy.get('.fa.fa-italic').first();
+    italicBtnChain.click();
+    let editor1HTMLContentChain = cy.get('#html-content-editor1');
+    editor1HTMLContentChain.should('contain.text', '<i>&nbsp;Hello World</i>');
+    quoteChain = cy.get('.angular-editor-quote>i');
+    selectedTextChain = quoteChain.selectText(3, 11);
+    selectedTextChain.should('eq', 'llo Worl');
+    italicBtnChain = cy.get('.fa.fa-italic').first();
+    italicBtnChain.click();
+    editor1HTMLContentChain = cy.get('#html-content-editor1');
+    editor1HTMLContentChain.should(
+      'contain.text',
+      '<i>&nbsp;He</i>llo Worl<i>d</i>',
+    );
   });
 
   it('Checks for text pattern and insert quote', () => {
