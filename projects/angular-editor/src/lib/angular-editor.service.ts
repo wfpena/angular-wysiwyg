@@ -15,6 +15,7 @@ export class AngularEditorService {
   uploadUrl?: string;
   uploadWithCredentials?: boolean;
   currentFontName: string;
+  currentFontSize: string;
 
   constructor(
     private http: HttpClient,
@@ -82,6 +83,7 @@ export class AngularEditorService {
    */
   setFontSize(fontSize: string) {
     this.doc.execCommand('fontSize', false, fontSize);
+    this.currentFontSize = fontSize;
   }
 
   /**

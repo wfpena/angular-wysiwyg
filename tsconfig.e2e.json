@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "sourceMap": false,
-    "types": ["cypress"]
+    "types": ["cypress"],
+    "lib": [
+      "es2022",
+      "dom"
+    ]
   },
   "include": [
     "src/**/*.spec.ts",

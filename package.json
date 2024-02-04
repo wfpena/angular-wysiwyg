@@ -58,7 +58,7 @@
     "@angular/compiler-cli": "^17.0.8",
     "@angular/localize": "^17.0.8",
     "@cypress/schematic": "^2.5.1",
-    "@types/jasmine": "^5.1.1",
+    "@types/jasmine": "^5.1.4",
     "@types/lodash-es": "^4.17.10",
     "@types/node": "^18.18.6",
     "@typescript-eslint/eslint-plugin": "6.18.0",

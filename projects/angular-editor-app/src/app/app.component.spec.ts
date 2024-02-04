@@ -19,7 +19,6 @@ describe('AppComponent', () => {
   it(`should have as title 'angular-wysiwyg-app'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    console.log('app her:', app);
     expect(app.title).toEqual('angular-wysiwyg-app');
   });
 

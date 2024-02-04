@@ -21,9 +21,11 @@
   <form [formGroup]="form">
     <angular-editor [id]="'editor2'" [config]="config2" [style.width]="'100px'" formControlName="signature" (ngModelChange)="onChange2($event)"></angular-editor>
   </form>
-  <p>
-    Form Value: {{ form.value.signature }}
-  </p>
+  <div>
+    Form Value: 
+    <br>
+    <div id="html-content-editor2" class="html-demo-content">{{ form.value.signature }}</div>
+  </div>
   <p>
     Form Status: <span [style.color]="form.status === 'INVALID' ? 'red': 'green'"><b>{{ form.status }}</b></span>
   </p>
