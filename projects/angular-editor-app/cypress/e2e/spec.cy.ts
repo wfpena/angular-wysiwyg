@@ -344,4 +344,83 @@ describe('General tests', () => {
       '<p><font face="Comic Sans MS" size="5">Something random here.</font></p><p><font face="Comic Sans MS" size="5">More stuff...</font></p>',
     );
   });
+
+  it('Should maintain font size and name after operations - case 2', () => {
+    cy.visit('/');
+    const editor1 = cy.get('#editor1').get('.angular-editor-textarea').first();
+    editor1.click();
+    editor1.type('> ');
+    const editor1HTMLContent = cy.get('#html-content-editor1');
+    editor1HTMLContent
+      .invoke('text')
+      .should('contain', '<div class="angular-editor-quote">');
+    cy.visit('/');
+    cy.get('.fa.fa-image')
+      .first()
+      .should('have.prop', 'tagName')
+      .should('eq', 'I');
+    cy.get('.fa.fa-image')
+      .first()
+      .parent()
+      .should('have.prop', 'tagName')
+      .should('eq', 'BUTTON');
+    cy.get('.fa.fa-image').first().parent().click({ force: true });
+    cy.get('input[type=file]').first().invoke('css', 'display', 'block');
+    cy.get('input[type=file]')
+      .first()
+      .selectFile([
+        {
+          contents:
+            './projects/angular-editor-app/src/assets/angular-wysiwyg-logo2.PNG',
+        },
+      ]);
+    cy.get('input[type=file]').first().invoke('css', 'display', 'none');
+    cy.get('#html-content-editor1').should(
+      'contain.text',
+      '<img src="data:image/png;base64,iVBORw0KGgoAAA',
+    );
+    cy.get('.angular-editor-textarea img').first().should('exist');
+    cy.get('.angular-editor-textarea img').first().should('have.attr', 'src');
+    cy.get('.angular-editor-textarea img').first().click();
+    cy.get('.angular-editor-textarea img').trigger('mousedown', { button: 0 });
+    cy.get('.angular-editor-textarea')
+      .first()
+      .trigger('mousemove', { x: 20, y: 20, force: true })
+      .trigger('mouseup', { clientX: 20, clientY: 20, force: true })
+      .click();
+    cy.get('.angular-editor-textarea img')
+      .first()
+      .should('have.attr', 'width')
+      .should('equal', '96px');
+    const editor1Chain = cy
+      .get('#editor1')
+      .get('.angular-editor-textarea')
+      .first();
+    editor1Chain.focus();
+    editor1Chain.type('Something random here.');
+    cy.get('#html-content-editor1').should(
+      'contain.text',
+      '<font face="Comic Sans MS" size="5">Something random here.</font>',
+    );
+    const typeMultipleBackspacesStr = Array(32).fill('{backspace}').join('');
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type(typeMultipleBackspacesStr);
+    cy.get('#html-content-editor1').invoke('text').should('eq', '');
+    cy.get('#editor1').get('.angular-editor-textarea').first().type('* ');
+    cy.get('#html-content-editor1').should(
+      'have.text',
+      '<ul><li><font face="Comic Sans MS" size="5"></font></li></ul>',
+    );
+    cy.get('.fa.fa-align-center').first().click();
+    cy.get('#editor1').click();
+    cy.get('.fa.fa-list-ul').first().parent().should('have.class', 'active');
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('{backspace}{backspace}');
+    cy.get('.fa.fa-align-center').parent().should('not.have.class', 'active');
+    cy.get('.fa.fa-align-left').parent().should('have.class', 'active');
+  });
 });
