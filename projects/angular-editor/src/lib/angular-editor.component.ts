@@ -682,20 +682,18 @@ export class AngularEditorComponent
   exec($event: KeyboardEvent | any | null = null) {
     if ($event && ($event.key === 'Delete' || $event.key === 'Backspace')) {
       if (this.currentSelectedImage) {
-        this.onContentChange(this.textArea.nativeElement);
         this.removeResizeWrapper();
         if ($event.key === 'Delete') {
           this.selectImage(true);
         }
       } else if ($event.key === 'Backspace') {
-        // TODO: Add tests for this
         const justifyRightOrCenterEnabled =
           this.doc.queryCommandState('justifyCenter') ||
           this.doc.queryCommandState('justifyRight');
-        const selection = this.doc.getSelection() as Selection;
-        const txtData = selection.anchorNode?.textContent;
+        const selection = this.doc.getSelection();
+        const txtData = selection?.anchorNode?.textContent;
         const previousSiblingTxtData =
-          selection.anchorNode?.previousSibling?.textContent;
+          selection?.anchorNode?.previousSibling?.textContent;
         if (
           justifyRightOrCenterEnabled &&
           txtData === '' &&
@@ -705,6 +703,7 @@ export class AngularEditorComponent
         }
       }
     }
+
     this.editorToolbar.triggerButtons();
 
     let userSelection;
@@ -717,14 +716,18 @@ export class AngularEditorComponent
 
     let a = userSelection.focusNode;
     const els = [] as any[];
+
     while (a && a.id !== 'editor') {
       els.unshift(a);
       a = a.parentNode;
     }
+
     if ($event && $event.type === 'keyup' && $event.key === ' ') {
       this.textPatternCheck();
     }
+
     this.editorToolbar.triggerBlocks(els);
+    this.onContentChange(this.textArea.nativeElement);
   }
 
   private configure() {
