@@ -143,6 +143,7 @@ export class AngularEditorComponent
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity
       ? this.config.imageResizeSensitivity
       : angularEditorConfig.imageResizeSensitivity;
+    this.configure();
   }
 
   ngAfterViewInit() {
@@ -454,6 +455,9 @@ export class AngularEditorComponent
     if (this.editorService.currentFontName) {
       this.editorService.setFontName(this.editorService.currentFontName);
     }
+    if (this.editorService.currentFontSize) {
+      this.editorService.setFontSize(this.editorService.currentFontSize);
+    }
     if (this.modeVisual) {
       html = element.innerHTML;
     } else {
@@ -666,6 +670,7 @@ export class AngularEditorComponent
         selection.addRange(range);
         patternDetected.command();
       }
+      this.onContentChange(this.textArea.nativeElement);
     }
   }
 
@@ -681,6 +686,22 @@ export class AngularEditorComponent
         this.removeResizeWrapper();
         if ($event.key === 'Delete') {
           this.selectImage(true);
+        }
+      } else if ($event.key === 'Backspace') {
+        // TODO: Add tests for this
+        const justifyRightOrCenterEnabled =
+          this.doc.queryCommandState('justifyCenter') ||
+          this.doc.queryCommandState('justifyRight');
+        const selection = this.doc.getSelection() as Selection;
+        const txtData = selection.anchorNode?.textContent;
+        const previousSiblingTxtData =
+          selection.anchorNode?.previousSibling?.textContent;
+        if (
+          justifyRightOrCenterEnabled &&
+          txtData === '' &&
+          previousSiblingTxtData === ''
+        ) {
+          this.doc.execCommand('justifyLeft');
         }
       }
     }
@@ -700,10 +721,10 @@ export class AngularEditorComponent
       els.unshift(a);
       a = a.parentNode;
     }
-    this.editorToolbar.triggerBlocks(els);
     if ($event && $event.type === 'keyup' && $event.key === ' ') {
       this.textPatternCheck();
     }
+    this.editorToolbar.triggerBlocks(els);
   }
 
   private configure() {
