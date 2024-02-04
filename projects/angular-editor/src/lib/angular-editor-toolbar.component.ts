@@ -57,10 +57,6 @@ export class AngularEditorToolbarComponent {
       value: 'h6',
     },
     {
-      label: 'Heading 7',
-      value: 'h7',
-    },
-    {
       label: 'Paragraph',
       value: 'p',
     },

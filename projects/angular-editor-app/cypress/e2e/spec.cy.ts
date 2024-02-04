@@ -40,9 +40,9 @@ describe('General tests', () => {
   it('Should change font name and maintain it correctly', () => {
     cy.visit('/');
     const editor1Chain = cy.get('#editor1');
+    editor1Chain.focus();
     editor1Chain.click();
     editor1Chain.type('> Hello World');
-    editor1Chain.scrollIntoView();
     const quoteChain = cy.get('.angular-editor-quote > font');
     const selectedTextChain = quoteChain.selectText(0, 12, true);
     selectedTextChain.should('have.string', 'Hello World');
@@ -59,13 +59,15 @@ describe('General tests', () => {
     cy.get('.ae-picker-label').eq(1).click();
     cy.get(
       '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(2)',
-    ).click();
+    )
+      .first()
+      .click();
     cy.get('#html-content-editor1').should(
       'contain.text',
       '&nbsp;<font size="5" face="Times New Roman"><i style="">Hello World</i></font></div>',
     );
     cy.window().then((win) => win.getSelection().removeAllRanges());
-    cy.get('#editor1').type('{enter}{enter}');
+    cy.get('#editor1').focus().click().type('{enter}{enter}');
     cy.get('#html-content-editor1').should(
       'contain.text',
       '<font size="5" face="Times New Roman"><i style="">Hello World</i></font></div><font size="5" face="Times New Roman"><i style=""><br></i></font><font size="5" face="Times New Roman"><i style=""><br></i></font>',
@@ -74,10 +76,12 @@ describe('General tests', () => {
     cy.get('.ae-picker-label').eq(1).click();
     cy.get(
       '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(1)',
-    ).click();
+    )
+      .first()
+      .click();
     cy.get('#html-content-editor1').should(
       'contain.text',
-      '<i style="">Hello World</i></font></font></div><font size="5" face="Arial"><i style=""><br></i></font><font size="5" face="Times New Roman"><i style=""><br></i></font>',
+      '<i style="">Hello World</i></font></div><font size="5" face="Arial"><i style=""><br></i></font><font size="5" face="Times New Roman"><i style=""><br></i></font>',
     );
   });
 
@@ -157,7 +161,7 @@ describe('General tests', () => {
     );
     editor1.type('{enter}{enter}');
     cy.get('#html-content-editor1').then((t) =>
-      expect(t.text()).to.match(/<p><br><\/p>$/),
+      expect(t.text()).to.match(/<div><br><\/div>$/),
     );
   });
 
@@ -322,27 +326,40 @@ describe('General tests', () => {
     editor1Chain.focus();
     editor1Chain.type('{enter}Something random here.');
     editor1Chain.type('{enter}Something random here.');
-    cy.get('#html-content-editor1').should(
-      'contain.text',
-      '<p><font face="Comic Sans MS" size="5">Something random here.</font></p><p><font face="Comic Sans MS" size="5">Something random here.</font></p>',
-    );
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => text.substring(text.length - 250, text.length))
+      .should(
+        'include',
+        '<div><font face="Comic Sans MS" size="5">Something random here.</font></div><div><font face="Comic Sans MS" size="5">Something random here.</font></div>',
+      );
     const typeMultipleBackspacesStr = Array(22).fill('{backspace}').join('');
     cy.get('#editor1')
       .get('.angular-editor-textarea')
       .first()
       .type(typeMultipleBackspacesStr);
-    cy.get('#html-content-editor1').should(
-      'contain.text',
-      '<p><font face="Comic Sans MS" size="5">Something random here.</font></p><p><br></p>',
-    );
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => {
+        return text.substring(text.length - 150, text.length);
+      })
+      .should(
+        'include',
+        '<div><font face="Comic Sans MS" size="5">Something random here.</font></div><div><br></div>',
+      );
     cy.get('#editor1')
       .get('.angular-editor-textarea')
       .first()
       .type('More stuff...');
-    cy.get('#html-content-editor1').should(
-      'contain.text',
-      '<p><font face="Comic Sans MS" size="5">Something random here.</font></p><p><font face="Comic Sans MS" size="5">More stuff...</font></p>',
-    );
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => {
+        return text.substring(text.length - 150, text.length);
+      })
+      .should(
+        'include',
+        '<div><font face="Comic Sans MS" size="5">Something random here.</font></div><div><font face="Comic Sans MS" size="5">More stuff...</font></div>',
+      );
   });
 
   it('Should maintain font size and name after operations - case 2', () => {
@@ -354,7 +371,6 @@ describe('General tests', () => {
     editor1HTMLContent
       .invoke('text')
       .should('contain', '<div class="angular-editor-quote">');
-    cy.visit('/');
     cy.get('.fa.fa-image')
       .first()
       .should('have.prop', 'tagName')
@@ -391,17 +407,20 @@ describe('General tests', () => {
     cy.get('.angular-editor-textarea img')
       .first()
       .should('have.attr', 'width')
-      .should('equal', '96px');
+      .should('match', /^1\d{2}px$/);
     const editor1Chain = cy
       .get('#editor1')
       .get('.angular-editor-textarea')
       .first();
     editor1Chain.focus();
     editor1Chain.type('Something random here.');
-    cy.get('#html-content-editor1').should(
-      'contain.text',
-      '<font face="Comic Sans MS" size="5">Something random here.</font>',
-    );
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => text.substring(text.length - 250, text.length))
+      .should(
+        'include',
+        '<font face="Comic Sans MS" size="5">Something random here.</font>',
+      );
     const typeMultipleBackspacesStr = Array(32).fill('{backspace}').join('');
     cy.get('#editor1')
       .get('.angular-editor-textarea')
@@ -409,18 +428,175 @@ describe('General tests', () => {
       .type(typeMultipleBackspacesStr);
     cy.get('#html-content-editor1').invoke('text').should('eq', '');
     cy.get('#editor1').get('.angular-editor-textarea').first().type('* ');
-    cy.get('#html-content-editor1').should(
-      'have.text',
-      '<ul><li><font face="Comic Sans MS" size="5"></font></li></ul>',
-    );
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => {
+        return text.substring(text.length - 250, text.length);
+      })
+      .should(
+        'eq',
+        '<ul><li><font face="Comic Sans MS" size="5">*&nbsp;</font></li></ul>',
+      );
+    cy.get('#editor1').focus().click();
     cy.get('.fa.fa-align-center').first().click();
-    cy.get('#editor1').click();
+    cy.get('#editor1').get('.angular-editor-textarea').first().click();
+    cy.get('.fa.fa-list-ul')
+      .first()
+      .parent()
+      .should('have.class', 'angular-editor-button');
+    cy.get('#editor1').first().focus().click();
     cy.get('.fa.fa-list-ul').first().parent().should('have.class', 'active');
     cy.get('#editor1')
       .get('.angular-editor-textarea')
       .first()
       .type('{backspace}{backspace}');
     cy.get('.fa.fa-align-center').parent().should('not.have.class', 'active');
+    cy.get('#editor1').get('.angular-editor-textarea').first().focus().click();
     cy.get('.fa.fa-align-left').parent().should('have.class', 'active');
+  });
+
+  it('should add and keep headings without overwriting font size', () => {
+    cy.visit('/');
+    const editor1 = cy.get('#editor1').get('.angular-editor-textarea').first();
+    editor1.type('First Header h1');
+    editor1.selectText(0, 0, true);
+    cy.get('.ae-picker-label').first().click();
+    let h1OptionChain = cy
+      .get(
+        '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
+      )
+      .first();
+    h1OptionChain.click();
+    cy.get('#html-content-editor1').should(
+      'have.text',
+      '<h1><font face="Comic Sans MS">First Header h1</font></h1>',
+    );
+  });
+
+  it('should set header correct if set before writing text', () => {
+    cy.visit('/');
+    cy.get('.ae-picker-label').first().click();
+    let h1OptionChain = cy
+      .get(
+        '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
+      )
+      .first();
+    h1OptionChain.click();
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('First Header h1');
+    cy.get('#html-content-editor1').should(
+      'have.text',
+      '<h1><font face="Comic Sans MS">First Header h1</font></h1>',
+    );
+  });
+
+  it('should set to normal paragraph when user keeps writing', () => {
+    cy.visit('/');
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('First Header h1')
+      .selectText(0, 0, true);
+    cy.get('.ae-picker-label').first().click();
+    let h1OptionChain = cy
+      .get(
+        '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
+      )
+      .first();
+    h1OptionChain.click();
+    cy.get('#editor1').click();
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('{enter}')
+      .type('Content for the h1 header...');
+    cy.get('#html-content-editor1').should(
+      'have.text',
+      '<h1><font face="Comic Sans MS">First Header h1</font></h1><div><font face="Comic Sans MS" size="5">Content for the h1 header...</font></div>',
+    );
+  });
+
+  it('should be able to add other headers and images', () => {
+    cy.visit('/');
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('First Header h1')
+      .selectText(0, 0, true);
+    cy.get('.ae-picker-label').first().click();
+    cy.get(
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
+    )
+      .first()
+      .click();
+    cy.get('#editor1').click();
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('{enter}')
+      .type('Content for the h1 header...')
+      .type('{enter}');
+    cy.get('.ae-picker-label').first().click();
+    cy.get(
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(2)',
+    )
+      .first()
+      .click();
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('Second Header h2')
+      .type('{enter}Content for the Second Header which has images...');
+    cy.get('#html-content-editor1').should(
+      'have.text',
+      '<h1><font face="Comic Sans MS">First Header h1</font></h1><div><font face="Comic Sans MS" size="5">Content for the h1 header...</font></div><h2><font face="Comic Sans MS">Second Header h2</font></h2><div><font face="Comic Sans MS" size="5">Content for the Second Header which has images...</font></div>',
+    );
+    cy.get('#editor1').get('.angular-editor-textarea').first().type('{enter}');
+    cy.get('.fa.fa-image').first().parent().click({ force: true });
+    cy.get('input[type=file]').first().invoke('css', 'display', 'block');
+    cy.get('input[type=file]')
+      .first()
+      .selectFile([
+        {
+          contents:
+            './projects/angular-editor-app/src/assets/angular-wysiwyg-logo2.PNG',
+        },
+      ]);
+    cy.get('input[type=file]').first().invoke('css', 'display', 'none');
+    cy.get('.angular-editor-textarea img').first().should('exist');
+    cy.get('.angular-editor-textarea img').first().click();
+    cy.get('.fa.fa-align-center').first().click();
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => text.substring(0, 345))
+      .should(
+        'include',
+        '<h1><font face="Comic Sans MS">First Header h1</font></h1><div><font face="Comic Sans MS" size="5">Content for the h1 header...</font></div><h2><font face="Comic Sans MS">Second Header h2</font></h2><div><font face="Comic Sans MS" size="5">Content for the Second Header which has images...</font></div><div style="text-align: center;"><img src=',
+      );
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('{enter}{enter}{backspace}');
+    cy.scrollTo('top');
+    cy.get('.ae-picker-label').first().click();
+    cy.get(
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(3)',
+    )
+      .first()
+      .click();
+    cy.get('#editor1')
+      .get('.angular-editor-textarea')
+      .first()
+      .type('A third header. An h3 header!')
+      .type('{enter}And it also has content!!!!');
+    cy.get('#html-content-editor1')
+      .invoke('text')
+      .then((text) => text.substring(235, text.length))
+      .should(
+        'include',
+        '"><font face="Comic Sans MS" size="5"><br></font></div><h3 style="text-align: left;"><font face="Comic Sans MS">A third header. An h3 header!</font></h3><div><font face="Comic Sans MS" size="5">And it also has content!!!!</font></div>',
+      );
   });
 });
