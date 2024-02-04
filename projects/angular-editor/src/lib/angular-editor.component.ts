@@ -108,6 +108,7 @@ export class AngularEditorComponent
     this.currentSelectedImage = e;
     this.addResizeWrapper();
     this.selectImage();
+    this.fontSettingsRefresh();
     this.onContentChange(this.textArea.nativeElement);
   }
 
@@ -143,7 +144,6 @@ export class AngularEditorComponent
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity
       ? this.config.imageResizeSensitivity
       : angularEditorConfig.imageResizeSensitivity;
-    this.configure();
   }
 
   ngAfterViewInit() {
@@ -226,6 +226,7 @@ export class AngularEditorComponent
   }
 
   onPaste(event: ClipboardEvent) {
+    this.fontSettingsRefresh();
     if (this.config.rawPaste) {
       event.preventDefault();
       const text = event.clipboardData?.getData('text/plain');
@@ -285,20 +286,6 @@ export class AngularEditorComponent
     }
   }
 
-  undo() {
-    if (this.editHistory.length < 1 || this.currentHistoryIndex <= 0) return;
-    this.currentHistoryIndex -= 1;
-    this.setElementState();
-    this.onContentChange(this.textArea.nativeElement, false);
-  }
-
-  redo() {
-    if (this.currentHistoryIndex >= this.editHistory.length - 1) return;
-    this.currentHistoryIndex += 1;
-    this.setElementState();
-    this.onContentChange(this.textArea.nativeElement, false);
-  }
-
   handleEnter(e) {
     const sel = this.doc.getSelection() as Selection;
     const focusNode = sel.focusNode as Node & HTMLElement & any;
@@ -333,6 +320,12 @@ export class AngularEditorComponent
         this.onContentChange(this.textArea.nativeElement, false);
       }
     }
+    if (this.editorService.currentFontName) {
+      this.editorService.setFontName(this.editorService.currentFontName);
+    }
+    if (this.editorService.currentFontSize) {
+      this.editorService.setFontSize(this.editorService.currentFontSize);
+    }
   }
 
   /**
@@ -345,20 +338,6 @@ export class AngularEditorComponent
     if (command === 'focus') {
       return;
     }
-    // TODO: Undo / Redo image resize
-    // if (this.currentSelectedImage) {
-    //   this.unselectImage();
-    //   if (command === 'undo') {
-    //     // this.unselectImage();
-    //     this.undo();
-    //     return;
-    //   }
-    //   if (command === 'redo') {
-    //     // this.unselectImage();
-    //     this.redo();
-    //     return;
-    //   }
-    // }
     if (command === 'toggleEditorMode') {
       this.toggleEditorMode(this.modeVisual);
     } else if (command !== '') {
@@ -373,6 +352,10 @@ export class AngularEditorComponent
       }
       this.exec();
     }
+
+    this.fontSettingsRefresh();
+
+    this.onContentChange(this.textArea.nativeElement);
   }
 
   onTextAreaFocus(event: FocusEvent): void {
@@ -420,6 +403,46 @@ export class AngularEditorComponent
     }
   }
 
+  hasParentTag(element: any, tagNames: string[]) {
+    if (!element) return null;
+    if (element && tagNames.includes(element.tagName)) {
+      return element.tagName;
+    }
+    return this.hasParentTag(element?.parentElement, tagNames);
+  }
+
+  fontSettingsRefresh() {
+    const currentFontName =
+      this.editorService.currentFontName || this.config.defaultFontName;
+    const currentFontSize =
+      this.editorService.currentFontSize || this.config.defaultFontSize;
+    if (currentFontName) {
+      this.editorService.setFontName(currentFontName);
+    }
+    if (currentFontSize) {
+      const selection = this.doc.getSelection();
+      const edRange = selection.getRangeAt(0);
+      let edNode = edRange.commonAncestorContainer;
+      const isHeader = this.hasParentTag(edNode, [
+        'H1',
+        'H2',
+        'H3',
+        'H4',
+        'H5',
+        'H6',
+      ]);
+      if (isHeader) {
+        let parent = edNode.parentElement;
+        while (parent) {
+          parent.removeAttribute('size');
+          parent = parent.parentElement;
+        }
+      } else {
+        this.editorService.setFontSize(currentFontSize);
+      }
+    }
+  }
+
   /**
    *  focus the text area when the editor is focused
    */
@@ -431,6 +454,7 @@ export class AngularEditorComponent
       sourceText?.focus();
       this.focused = true;
     }
+    this.fontSettingsRefresh();
   }
 
   addHistory(html) {
@@ -452,12 +476,6 @@ export class AngularEditorComponent
    */
   onContentChange(element: any, addChangeToHistory = true): void {
     let html = '';
-    if (this.editorService.currentFontName) {
-      this.editorService.setFontName(this.editorService.currentFontName);
-    }
-    if (this.editorService.currentFontSize) {
-      this.editorService.setFontSize(this.editorService.currentFontSize);
-    }
     if (this.modeVisual) {
       html = element.innerHTML;
     } else {
@@ -670,8 +688,8 @@ export class AngularEditorComponent
         selection.addRange(range);
         patternDetected.command();
       }
-      this.onContentChange(this.textArea.nativeElement);
     }
+    this.fontSettingsRefresh();
   }
 
   /**
@@ -702,6 +720,12 @@ export class AngularEditorComponent
           this.doc.execCommand('justifyLeft');
         }
       }
+      if (this.editorService.currentFontName) {
+        this.editorService.setFontName(this.editorService.currentFontName);
+      }
+      if (this.editorService.currentFontSize) {
+        this.editorService.setFontSize(this.editorService.currentFontSize);
+      }
     }
 
     this.editorToolbar.triggerButtons();
@@ -727,7 +751,6 @@ export class AngularEditorComponent
     }
 
     this.editorToolbar.triggerBlocks(els);
-    this.onContentChange(this.textArea.nativeElement);
   }
 
   private configure() {
@@ -738,12 +761,6 @@ export class AngularEditorComponent
       this.editorService.setDefaultParagraphSeparator(
         this.config.defaultParagraphSeparator,
       );
-    }
-    if (this.config.defaultFontName) {
-      this.editorService.setFontName(this.config.defaultFontName);
-    }
-    if (this.config.defaultFontSize) {
-      this.editorService.setFontSize(this.config.defaultFontSize);
     }
   }
 
