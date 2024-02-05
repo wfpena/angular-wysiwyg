@@ -1236,9 +1236,6 @@ class AngularEditorToolbarComponent {
     label: 'Heading 6',
     value: 'h6'
   }, {
-    label: 'Heading 7',
-    value: 'h7'
-  }, {
     label: 'Paragraph',
     value: 'p'
   }, {
@@ -1711,6 +1708,7 @@ class AngularEditorComponent {
     this.currentSelectedImage = e;
     this.addResizeWrapper();
     this.selectImage();
+    this.fontSettingsRefresh();
     this.onContentChange(this.textArea.nativeElement);
   }
   constructor(r, editorService,
@@ -1739,7 +1737,6 @@ class AngularEditorComponent {
     this.config.toolbarPosition = this.config.toolbarPosition ? this.config.toolbarPosition : _config__WEBPACK_IMPORTED_MODULE_2__.angularEditorConfig.toolbarPosition;
     this.config.editHistoryLimit = this.config.editHistoryLimit ? this.config.editHistoryLimit : _config__WEBPACK_IMPORTED_MODULE_2__.angularEditorConfig.editHistoryLimit;
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity ? this.config.imageResizeSensitivity : _config__WEBPACK_IMPORTED_MODULE_2__.angularEditorConfig.imageResizeSensitivity;
-    this.configure();
   }
   ngAfterViewInit() {
     if ((0,_utils__WEBPACK_IMPORTED_MODULE_3__.isDefined)(this.autoFocus)) {
@@ -1802,6 +1799,7 @@ class AngularEditorComponent {
     this.r.setStyle(this.textArea.nativeElement, 'caret-color', 'black');
   }
   onPaste(event) {
+    this.fontSettingsRefresh();
     if (this.config.rawPaste) {
       event.preventDefault();
       const text = event.clipboardData?.getData('text/plain');
@@ -1849,18 +1847,6 @@ class AngularEditorComponent {
       this.unselectImage();
     }
   }
-  undo() {
-    if (this.editHistory.length < 1 || this.currentHistoryIndex <= 0) return;
-    this.currentHistoryIndex -= 1;
-    this.setElementState();
-    this.onContentChange(this.textArea.nativeElement, false);
-  }
-  redo() {
-    if (this.currentHistoryIndex >= this.editHistory.length - 1) return;
-    this.currentHistoryIndex += 1;
-    this.setElementState();
-    this.onContentChange(this.textArea.nativeElement, false);
-  }
   handleEnter(e) {
     const sel = this.doc.getSelection();
     const focusNode = sel.focusNode;
@@ -1886,6 +1872,12 @@ class AngularEditorComponent {
         this.onContentChange(this.textArea.nativeElement, false);
       }
     }
+    if (this.editorService.currentFontName) {
+      this.editorService.setFontName(this.editorService.currentFontName);
+    }
+    if (this.editorService.currentFontSize) {
+      this.editorService.setFontSize(this.editorService.currentFontSize);
+    }
   }
   /**
    * Executed command from editor header buttons
@@ -1897,20 +1889,6 @@ class AngularEditorComponent {
     if (command === 'focus') {
       return;
     }
-    // TODO: Undo / Redo image resize
-    // if (this.currentSelectedImage) {
-    //   this.unselectImage();
-    //   if (command === 'undo') {
-    //     // this.unselectImage();
-    //     this.undo();
-    //     return;
-    //   }
-    //   if (command === 'redo') {
-    //     // this.unselectImage();
-    //     this.redo();
-    //     return;
-    //   }
-    // }
     if (command === 'toggleEditorMode') {
       this.toggleEditorMode(this.modeVisual);
     } else if (command !== '') {
@@ -1925,6 +1903,8 @@ class AngularEditorComponent {
       }
       this.exec();
     }
+    this.fontSettingsRefresh();
+    this.onContentChange(this.textArea.nativeElement);
   }
   onTextAreaFocus(event) {
     if (this.focused) {
@@ -1960,6 +1940,35 @@ class AngularEditorComponent {
       }
     }
   }
+  hasParentTag(element, tagNames) {
+    if (!element) return null;
+    if (element && tagNames.includes(element.tagName)) {
+      return element.tagName;
+    }
+    return this.hasParentTag(element?.parentElement, tagNames);
+  }
+  fontSettingsRefresh() {
+    const currentFontName = this.editorService.currentFontName || this.config.defaultFontName;
+    const currentFontSize = this.editorService.currentFontSize || this.config.defaultFontSize;
+    if (currentFontName) {
+      this.editorService.setFontName(currentFontName);
+    }
+    if (currentFontSize) {
+      const selection = this.doc.getSelection();
+      const edRange = selection.getRangeAt(0);
+      let edNode = edRange.commonAncestorContainer;
+      const isHeader = this.hasParentTag(edNode, ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']);
+      if (isHeader) {
+        let parent = edNode.parentElement;
+        while (parent) {
+          parent.removeAttribute('size');
+          parent = parent.parentElement;
+        }
+      } else {
+        this.editorService.setFontSize(currentFontSize);
+      }
+    }
+  }
   /**
    *  focus the text area when the editor is focused
    */
@@ -1971,6 +1980,7 @@ class AngularEditorComponent {
       sourceText?.focus();
       this.focused = true;
     }
+    this.fontSettingsRefresh();
   }
   addHistory(html) {
     if (this.config.editHistoryLimit != null && this.editHistory.length >= this.config.editHistoryLimit) {
@@ -1987,12 +1997,6 @@ class AngularEditorComponent {
    */
   onContentChange(element, addChangeToHistory = true) {
     let html = '';
-    if (this.editorService.currentFontName) {
-      this.editorService.setFontName(this.editorService.currentFontName);
-    }
-    if (this.editorService.currentFontSize) {
-      this.editorService.setFontSize(this.editorService.currentFontSize);
-    }
     if (this.modeVisual) {
       html = element.innerHTML;
     } else {
@@ -2174,8 +2178,8 @@ class AngularEditorComponent {
         selection.addRange(range);
         patternDetected.command();
       }
-      this.onContentChange(this.textArea.nativeElement);
     }
+    this.fontSettingsRefresh();
   }
   /**
    * toggles editor buttons when cursor moved or positioning
@@ -2185,20 +2189,24 @@ class AngularEditorComponent {
   exec($event = null) {
     if ($event && ($event.key === 'Delete' || $event.key === 'Backspace')) {
       if (this.currentSelectedImage) {
-        this.onContentChange(this.textArea.nativeElement);
         this.removeResizeWrapper();
         if ($event.key === 'Delete') {
           this.selectImage(true);
         }
       } else if ($event.key === 'Backspace') {
-        // TODO: Add tests for this
         const justifyRightOrCenterEnabled = this.doc.queryCommandState('justifyCenter') || this.doc.queryCommandState('justifyRight');
         const selection = this.doc.getSelection();
-        const txtData = selection.anchorNode?.textContent;
-        const previousSiblingTxtData = selection.anchorNode?.previousSibling?.textContent;
+        const txtData = selection?.anchorNode?.textContent;
+        const previousSiblingTxtData = selection?.anchorNode?.previousSibling?.textContent;
         if (justifyRightOrCenterEnabled && txtData === '' && previousSiblingTxtData === '') {
           this.doc.execCommand('justifyLeft');
         }
+      }
+      if (this.editorService.currentFontName) {
+        this.editorService.setFontName(this.editorService.currentFontName);
+      }
+      if (this.editorService.currentFontSize) {
+        this.editorService.setFontSize(this.editorService.currentFontSize);
       }
     }
     this.editorToolbar.triggerButtons();
@@ -2223,12 +2231,6 @@ class AngularEditorComponent {
     this.editorService.uploadWithCredentials = this.config.uploadWithCredentials;
     if (this.config.defaultParagraphSeparator) {
       this.editorService.setDefaultParagraphSeparator(this.config.defaultParagraphSeparator);
-    }
-    if (this.config.defaultFontName) {
-      this.editorService.setFontName(this.config.defaultFontName);
-    }
-    if (this.config.defaultFontSize) {
-      this.editorService.setFontSize(this.config.defaultFontSize);
     }
   }
   getFonts() {
