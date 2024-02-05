@@ -26,8 +26,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run Lib Unit Tests
-        run: yarn test:lib
-
       - name: Run App Unit Tests
-        run: yarn test
+        run: yarn test:unit
