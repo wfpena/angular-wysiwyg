@@ -1,5 +1,22 @@
 @import "style";
 
+.droparea {
+  font-size: 1.5rem;
+  border: 3px dashed #bbb;
+  padding: 1.5rem;
+  background-color: #eff;
+  color: #aaa;
+}
+
+.dragarea {
+  font-size: 1.5rem;
+  border: 3px solid #bbb;
+  padding: 1.5rem;
+  background-color: #fff;
+  color: #bbb;
+}
+
+
 .angular-editor {
   position: relative;
 

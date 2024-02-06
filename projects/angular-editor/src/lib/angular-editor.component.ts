@@ -803,4 +803,61 @@ export class AngularEditorComponent
     html = html.replace('position: fixed;', '');
     return html;
   }
+
+  // TODO: Improve event handling
+  // TODO: Improve styles
+  dragAreaClass = '';
+  @HostListener('dragover', ['$event']) onDragOver(event: any) {
+    this.dragAreaClass = 'droparea';
+    event.preventDefault();
+  }
+  @HostListener('dragenter', ['$event']) onDragEnter(event: any) {
+    this.dragAreaClass = 'droparea';
+    event.preventDefault();
+  }
+  @HostListener('dragend', ['$event']) onDragEnd(event: any) {
+    this.dragAreaClass = '';
+    event.preventDefault();
+  }
+  @HostListener('dragleave', ['$event']) onDragLeave(event: any) {
+    this.dragAreaClass = '';
+    event.preventDefault();
+  }
+  @HostListener('drop', ['$event']) onDrop(event: any) {
+    this.dragAreaClass = '';
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer.files) {
+      let files: FileList = event.dataTransfer.files;
+      this.saveFiles(files);
+    }
+  }
+
+  // TODO: Use error
+  error: string;
+
+  isValidFile(file): boolean {
+    const fileType = file['type'];
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    if (!validImageTypes.includes(fileType)) {
+      return false;
+    }
+    return true;
+  }
+
+  saveFiles(files: FileList): void {
+    if (files.length > 1) {
+      this.error = 'Only one file at time allow';
+      return;
+    }
+
+    const file = files[0];
+    if (!this.isValidFile(file)) {
+      this.error = `Invalid file type`;
+      return;
+    }
+
+    this.error = '';
+    this.editorService.uploadImage(file);
+  }
 }
