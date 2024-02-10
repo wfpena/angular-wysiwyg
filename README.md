@@ -4,7 +4,7 @@
 
 # Angular WYSIWYG Text Editor
 
-Rich text editor Whay You See Is What You Get created using Angular 17.
+Rich text editor What You See Is What You Get created using Angular 17.
 
 Easy to use and customize.
 

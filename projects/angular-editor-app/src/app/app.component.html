@@ -60,8 +60,9 @@
   <h2 style="width: 100%;">Play with the configs:</h2>
   <div style="display: flex;flex-direction: column;align-items: center;">
     <div style="width: 80%;margin-bottom: 20px;">
-      <angular-editor [id]="'editor3'" [config]="config4" [style.width]="'100px'" (ngModelChange)="onChange3($event)"></angular-editor>
+      <angular-editor [(ngModel)]="htmlContent3" [id]="'editor3'" [config]="config4" [style.width]="'100px'" (ngModelChange)="onChange3($event)"></angular-editor>
     </div>
+    <div hidden id="html-content-editor3" class="html-demo-content">{{ htmlContent3 }}</div>
     <div>
       <table>
         <tr>
@@ -69,9 +70,10 @@
           <th>Value</th>
         </tr>
         <ng-container *ngFor="let conf of config3 | keyvalue; index as i;">
-          <tr *ngIf="!isObject(conf.value);">
+          <tr *ngIf="getTypeofVariable(conf.value) !== 'object';">
             <td><span style="font-weight: bold;">{{conf.key}}</span></td>
-            <td><input [(ngModel)]="config4[conf.key]"></td>
+            <td *ngIf="getTypeofVariable(conf.value) !== 'boolean'"><input [(ngModel)]="config4[conf.key]"></td>
+            <td *ngIf="getTypeofVariable(conf.value) === 'boolean'"><input type="checkbox" [(ngModel)]="config4[conf.key]"></td>
           </tr>
         </ng-container>
       </table>
