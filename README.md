@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="150px" src="projects\angular-editor-app\src\assets\angular-wysiwyg-logo2.PNG" alt="AngularEditor logo"/>
+  <img width="150px" src="https://raw.githubusercontent.com/wfpena/angular-wysiwyg/HEAD/projects/angular-editor-app/src/assets/angular-wysiwyg-logo2.PNG" alt="AngularEditor logo"/>
 </p>
 
 # Angular WYSIWYG Text Editor
@@ -17,7 +17,7 @@ Easy to use and customize.
 ---
 
 <p align="center">
-  <img width="800px" src="projects\angular-editor-app\src\assets\wysiwyg-demo-1.gif" alt="AngularEditor logo"/>
+  <img width="800px" src="https://raw.githubusercontent.com/wfpena/angular-wysiwyg/HEAD/projects/angular-editor-app/src/assets/wysiwyg-demo-1.gif" alt="AngularEditor logo"/>
 </p>
 
 # Getting Started
