@@ -192,6 +192,7 @@ Feel free to customize the ``iconClass``, ``title``, and ``buttonClick`` event a
 |translate|yes|
 |uploadWithCredentials|false|
 |width|auto|
+|textPatternsEnabled|true
 
 ## Report Issues and Feature ideas
 
