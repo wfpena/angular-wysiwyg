@@ -144,6 +144,10 @@ export class AngularEditorComponent
     this.config.imageResizeSensitivity = this.config.imageResizeSensitivity
       ? this.config.imageResizeSensitivity
       : angularEditorConfig.imageResizeSensitivity;
+    this.config.textPatternsEnabled =
+      this.config.textPatternsEnabled == null
+        ? angularEditorConfig.textPatternsEnabled
+        : this.config.textPatternsEnabled;
   }
 
   ngAfterViewInit() {
@@ -649,6 +653,7 @@ export class AngularEditorComponent
   }
 
   textPatternCheck() {
+    if (this.config.textPatternsEnabled === false || !this.modeVisual) return;
     if (!this.modeVisual) return;
     const selection = this.doc.getSelection() as Selection;
     const txtData = selection.anchorNode?.textContent;

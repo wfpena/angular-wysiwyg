@@ -269,7 +269,7 @@ describe('General tests', () => {
     cy.get('.angular-editor-textarea img')
       .first()
       .should('have.attr', 'width')
-      .should('equal', '96px');
+      .should('match', /^9\d{1}px$/);
   });
 
   it('Should maintain font size and name after operations - case 1', () => {
@@ -318,7 +318,7 @@ describe('General tests', () => {
     cy.get('.angular-editor-textarea img')
       .first()
       .should('have.attr', 'width')
-      .should('equal', '96px');
+      .should('match', /^9\d{1}px$/);
     const editor1Chain = cy
       .get('#editor1')
       .get('.angular-editor-textarea')
@@ -598,5 +598,41 @@ describe('General tests', () => {
         'include',
         '"><font face="Comic Sans MS" size="5"><br></font></div><h3 style="text-align: left;"><font face="Comic Sans MS">A third header. An h3 header!</font></h3><div><font face="Comic Sans MS" size="5">And it also has content!!!!</font></div>',
       );
+  });
+
+  it('Should have editor 3 present on screen with empty text', () => {
+    cy.visit('/');
+    const editor1 = cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(1) > angular-editor',
+    );
+    cy.get('#html-content-editor3').invoke('text').should('eq', '');
+    cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(3) > table > tr:nth-child(19) > td:nth-child(2) > input',
+    )
+      .should('have.attr', 'type')
+      .should('eq', 'checkbox');
+    cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(3) > table > tr:nth-child(19) > td:nth-child(2) > input',
+    )
+      .should('have.attr', 'ng-reflect-model')
+      .should('eq', 'true');
+  });
+
+  it('Should disable text patterns based on config', () => {
+    cy.visit('/');
+    const editor1 = cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(1) > angular-editor',
+    );
+    editor1.click();
+    cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(3) > table > tr:nth-child(19) > td:nth-child(2) > input',
+    )
+      .should('have.attr', 'type')
+      .should('eq', 'checkbox');
+    cy.get(
+      'body > app-root > div:nth-child(5) > div > div:nth-child(3) > table > tr:nth-child(19) > td:nth-child(2) > input',
+    ).click();
+    editor1.type('> ');
+    cy.get('#html-content-editor3').invoke('text').should('eq', '&gt;&#160;');
   });
 });

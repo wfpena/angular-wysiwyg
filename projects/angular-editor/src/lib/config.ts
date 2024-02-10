@@ -53,6 +53,11 @@ export interface AngularEditorConfig {
    *  @default 2
    */
   imageResizeSensitivity?: number;
+  /**
+   * @description Enable or disable text patter checks example '> ' and '* '
+   * @default true
+   */
+  textPatternsEnabled?: boolean;
 }
 
 export const angularEditorConfig: AngularEditorConfig = {
@@ -92,4 +97,5 @@ export const angularEditorConfig: AngularEditorConfig = {
   ]*/
   editHistoryLimit: 50,
   imageResizeSensitivity: 2,
+  textPatternsEnabled: true,
 };
