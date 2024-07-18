@@ -164,6 +164,38 @@ In the example below, a custom button is created that adds the Angular Editor lo
 
 Feel free to customize the ``iconClass``, ``title``, and ``buttonClick`` event according to your requirements.
 
+### Changing the Icons
+
+You can replace the font-awesome images for the buttons by setting the content for the icon class on your project's global .css or .scss file.
+
+Here are some examples of how you might be able to do it. Replace the `/assets/<your-icon>.svg` with the url for your own custom icon.
+
+```css
+
+.fa.fa-undo::before {
+  // Replace the url to the icon that you want
+  content: url('/assets/<your-icon>.svg') !important;
+}
+
+// Redo
+.fa.fa-repeat::before {
+  content: url('/assets/<your-icon>.svg') !important;
+}
+
+// Strikethrough
+.fa.fa-strikethrough::before {
+  content: url('/assets/<your-icon>.svg') !important;
+}
+
+// Bold
+.fa.fa-bold::before {
+  content: url('/assets/<your-icon>.svg') !important;
+}
+// ...
+```
+
+This is currently a workaround for replacing the icon, in the future it will be a new feature on the library.
+
 ### Configs:
 
 

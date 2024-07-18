@@ -635,4 +635,108 @@ describe('General tests', () => {
     editor1.type('> ');
     cy.get('#html-content-editor3').invoke('text').should('eq', '&gt;&#160;');
   });
+
+  it('Should be able to insert multiple images with the same name', () => {
+    cy.visit('/');
+    const filePathAndName = './cypress/fixtures/small-img.png';
+
+    const addImage = () => {
+      return cy.get('input[type="file"]').first().selectFile(filePathAndName);
+    };
+
+    const getEditorElement = () => {
+      return cy.get('#editor1 > div > div > div > img');
+    };
+
+    cy.get('input[type=file]').first().invoke('css', 'display', 'block');
+
+    cy.get('input[type="file"]').first().selectFile(filePathAndName);
+    cy.get('#editor1 > div > div > div > img')
+      .should('exist')
+      .should('have.attr', 'src')
+      .should('include', 'data:image/png;base64,iVBORw0KGgoAAAA');
+
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+
+    for (let i = 0; i < 3; i++) {
+      addImage();
+      getEditorElement().should('have.length', i + 2);
+      getEditorElement()
+        .eq(i + 1)
+        .should('have.attr', 'src')
+        .should('include', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA');
+      cy.get('input[type=file]').first().invoke('val').should('be.empty');
+    }
+
+    getEditorElement().should('have.length', 4);
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+  });
+
+  it('Should be able to remove and insert the same image', async () => {
+    cy.visit('/');
+
+    cy.get('input[type=file]').first().invoke('css', 'display', 'block');
+
+    const filePathAndName = './cypress/fixtures/small-img.png';
+
+    const addImage = () => {
+      cy.get('.fa.fa-image').first().parent().click({ force: true });
+      cy.get('input[type="file"]').first().selectFile(filePathAndName);
+    };
+
+    const getEditorImageElements = () => {
+      return cy.get('#editor1 > div > div > div > img');
+    };
+
+    const getEditorElement = () => {
+      return cy.get('#editor1 > div > div > div');
+    };
+
+    cy.get('input[type="file"]').first().selectFile(filePathAndName);
+    cy.get('#editor1 > div > div > div > img')
+      .should('exist')
+      .should('have.attr', 'src')
+      .should('include', 'data:image/png;base64,iVBORw0KGgoAAAA');
+
+    cy.get('input[type=file]').first().should('have.value', '');
+
+    getEditorImageElements().type('{selectall}').type('{del}');
+
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+
+    addImage();
+
+    getEditorImageElements().should('have.length', 1);
+    getEditorImageElements()
+      .should('have.attr', 'src')
+      .should('include', 'data:image/png;base64,iVBORw0KGgoAAAA');
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+
+    getEditorImageElements().click().type('{backspace}');
+
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+
+    addImage();
+    addImage();
+    addImage();
+
+    getEditorImageElements().should('have.length', 3);
+    getEditorImageElements()
+      .should('have.attr', 'src')
+      .should('include', 'data:image/png;base64,iVBORw0KGgoAAAA');
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+
+    getEditorElement().click();
+    getEditorElement()
+      .type('{backspace}')
+      .type('{backspace}')
+      .type('{backspace}');
+
+    cy.get('input[type=file]').first().invoke('val').should('be.empty');
+    getEditorImageElements().should('have.length', 0);
+
+    addImage();
+
+    getEditorImageElements().should('have.length', 1);
+  });
 });
