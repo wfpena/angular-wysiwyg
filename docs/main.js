@@ -1512,6 +1512,9 @@ class AngularEditorToolbarComponent {
    * Upload image when file is selected.
    */
   onFileChanged(event) {
+    if (!event?.target?.files) {
+      return;
+    }
     const file = event.target.files[0];
     if (file.type.includes('image/')) {
       if (this.upload) {
@@ -1531,6 +1534,7 @@ class AngularEditorToolbarComponent {
         reader.readAsDataURL(file);
       }
     }
+    if (event.target) event.target.value = null;
   }
   watchUploadImage(response, event) {
     if (!response?.body?.imageUrl) {
