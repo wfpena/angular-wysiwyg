@@ -15,6 +15,7 @@ coverage/
 *.ico
 *.yml
 *.yaml
+*.ttf
 
 # Ignore config files
 .eslintrc

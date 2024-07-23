@@ -11,6 +11,7 @@ export interface CustomClass {
 export interface Font {
   name: string;
   class: string;
+  label?: string;
 }
 
 export interface AngularEditorConfig {
@@ -81,6 +82,8 @@ export const angularEditorConfig: AngularEditorConfig = {
     { class: 'times-new-roman', name: 'Times New Roman' },
     { class: 'calibri', name: 'Calibri' },
     { class: 'comic-sans-ms', name: 'Comic Sans MS' },
+    { class: 'verdana', name: 'Verdana' },
+    { class: 'roboto-regular', name: 'Roboto' },
   ],
   // uploadUrl: 'v1/image',
   uploadWithCredentials: false,
