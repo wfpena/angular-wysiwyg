@@ -1,6 +1,37 @@
 $fa-font-path: "https://netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts" !default;
 @import "font-awesome/scss/font-awesome.scss";
 
+
+@font-face {
+  font-family: 'Comic Sans MS';
+  src: url("./assets/fonts/Comic Sans MS.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: 'Arial';
+  src: url("./assets/fonts/Arial.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Verdana';
+  src: url("./assets/fonts/Verdana.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  src: url("./assets/fonts/Times New Roman.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url("./assets/fonts/Calibri W01 Regular.ttf") format("truetype"); 
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url("./assets/fonts/Roboto-Regular.ttf") format("truetype"); 
+}
+
 a {
   cursor: pointer;
 }

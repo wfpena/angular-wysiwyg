@@ -774,7 +774,7 @@ export class AngularEditorComponent
       ? this.config.fonts
       : angularEditorConfig.fonts;
     return fonts?.map((x) => {
-      return { label: x.name, value: x.name };
+      return { label: x.label || x.name, value: x.name };
     });
   }
 

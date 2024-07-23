@@ -35,6 +35,10 @@ export class AppComponent implements OnInit {
     // toolbarPosition: 'top',
     defaultFontName: 'Comic Sans MS',
     defaultFontSize: '5',
+    fonts: [
+      ...angularEditorConfig.fonts,
+      { class: 'roboto-slab', name: 'RobotoSlab', label: 'Roboto Custom' },
+    ],
     // showToolbar: false,
     // defaultParagraphSeparator: 'p',
     customClasses: [
