@@ -196,6 +196,30 @@ Here are some examples of how you might be able to do it. Replace the `/assets/<
 
 This is currently a workaround for replacing the icon, in the future it will be a new feature on the library.
 
+### Changing or Adding new Fonts
+
+1. Download the font that you want to add (or have its url). For example, on this project I downloaded the `projects/angular-editor-app/src/assets/fonts/RobotoSlab-VariableFont_wght.ttf` font to add as a custom font.
+
+2. Add the font family to your `scss` or `css` file. Example for the RobotoSlab example:
+
+```scss
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('./assets/fonts/RobotoSlab-VariableFont_wght.ttf');
+}
+```
+
+3. Change the `fonts` config to either completely override the fonts or add a new custom font. For example, adding the RobotoSlab config to the demo:
+
+```typescript
+// For example here I imported the default fonts from angularEditorConfig and also added a new font that will have the label Roboto Custom
+fonts: [
+  ...angularEditorConfig.fonts,
+  { class: 'roboto-slab', name: 'RobotoSlab', label: 'Roboto Custom' },
+],
+```
+
+
 ### Configs:
 
 
