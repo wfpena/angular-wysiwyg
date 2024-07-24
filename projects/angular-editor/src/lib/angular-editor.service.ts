@@ -102,9 +102,9 @@ export class AngularEditorService {
    * save selection when the editor is focussed out
    */
   public saveSelection = (): void => {
-    if (this.doc.getSelection) {
-      const sel = this.doc.getSelection() as Selection;
-      if (sel.getRangeAt && sel.rangeCount) {
+    const sel = this.doc.getSelection() as Selection;
+    if (sel) {
+      if (sel?.getRangeAt && sel?.rangeCount) {
         this.savedSelection = sel.getRangeAt(0);
         this.selectedText = sel.toString();
       }
@@ -346,5 +346,13 @@ export class AngularEditorService {
       return node;
     }
     return this.getFirstParentWithProperty(node.parentNode, className);
+  }
+
+  getCurrentSelection() {
+    const selection = this.doc.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      return selection.getRangeAt(0);
+    }
+    return null;
   }
 }

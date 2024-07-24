@@ -108,7 +108,6 @@ export class AngularEditorComponent
     this.currentSelectedImage = e;
     this.addResizeWrapper();
     this.selectImage();
-    this.fontSettingsRefresh();
     this.onContentChange(this.textArea.nativeElement);
   }
 
@@ -148,6 +147,14 @@ export class AngularEditorComponent
       this.config.textPatternsEnabled == null
         ? angularEditorConfig.textPatternsEnabled
         : this.config.textPatternsEnabled;
+    this.config.defaultFontName =
+      this.config.defaultFontName ||
+      this.config.fonts[0]?.label ||
+      angularEditorConfig.defaultFontName;
+    this.config.defaultFontSize =
+      this.config.defaultFontSize || angularEditorConfig.defaultFontSize;
+    this.editorService.setFontName(this.config.defaultFontName);
+    this.editorService.setFontSize(this.config.defaultFontSize);
   }
 
   ngAfterViewInit() {
@@ -230,7 +237,6 @@ export class AngularEditorComponent
   }
 
   onPaste(event: ClipboardEvent) {
-    this.fontSettingsRefresh();
     if (this.config.rawPaste) {
       event.preventDefault();
       const text = event.clipboardData?.getData('text/plain');
@@ -324,12 +330,6 @@ export class AngularEditorComponent
         this.onContentChange(this.textArea.nativeElement, false);
       }
     }
-    if (this.editorService.currentFontName) {
-      this.editorService.setFontName(this.editorService.currentFontName);
-    }
-    if (this.editorService.currentFontSize) {
-      this.editorService.setFontSize(this.editorService.currentFontSize);
-    }
   }
 
   /**
@@ -357,8 +357,6 @@ export class AngularEditorComponent
       this.exec();
     }
 
-    this.fontSettingsRefresh();
-
     this.onContentChange(this.textArea.nativeElement);
   }
 
@@ -367,6 +365,7 @@ export class AngularEditorComponent
       event.stopPropagation();
       return;
     }
+    this.runFontNameAndSizeCheck();
     this.focused = true;
     this.focusEvent.emit(event);
     if (!this.touched || !this.changed) {
@@ -415,34 +414,52 @@ export class AngularEditorComponent
     return this.hasParentTag(element?.parentElement, tagNames);
   }
 
-  fontSettingsRefresh() {
-    const currentFontName =
-      this.editorService.currentFontName || this.config.defaultFontName;
-    const currentFontSize =
-      this.editorService.currentFontSize || this.config.defaultFontSize;
-    if (currentFontName) {
-      this.editorService.setFontName(currentFontName);
+  isCurrentSelectionHeader(): boolean {
+    if (
+      !['pre', 'div', 'default'].includes(
+        this.editorToolbar.block?.toLowerCase(),
+      )
+    ) {
+      return true;
     }
-    if (currentFontSize) {
-      const selection = this.doc.getSelection();
-      const edRange = selection.getRangeAt(0);
-      let edNode = edRange.commonAncestorContainer;
-      const isHeader = this.hasParentTag(edNode, [
-        'H1',
-        'H2',
-        'H3',
-        'H4',
-        'H5',
-        'H6',
-      ]);
-      if (isHeader) {
-        let parent = edNode.parentElement;
-        while (parent) {
-          parent.removeAttribute('size');
-          parent = parent.parentElement;
-        }
-      } else {
-        this.editorService.setFontSize(currentFontSize);
+    const selection = this.doc.getSelection();
+    if (selection.rangeCount < 1) return false;
+    const edRange = selection?.getRangeAt(0);
+    let edNode = edRange.commonAncestorContainer;
+    const isHeader = this.hasParentTag(edNode, [
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+    ]);
+    return (
+      isHeader == true ||
+      ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(isHeader as string)
+    );
+  }
+
+  deepRemoveAttribute(attr: string, node?: Node) {
+    const selection = this.doc.getSelection();
+    const edRange = selection.getRangeAt(0);
+    let edNode = node;
+    if (!edNode) {
+      edNode = edRange?.commonAncestorContainer;
+    }
+    const isHeader = this.hasParentTag(edNode, [
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+    ]);
+    if (isHeader) {
+      let parent = edNode.parentElement;
+      while (parent) {
+        parent.removeAttribute(attr);
+        parent = parent.parentElement;
       }
     }
   }
@@ -458,7 +475,7 @@ export class AngularEditorComponent
       sourceText?.focus();
       this.focused = true;
     }
-    this.fontSettingsRefresh();
+    this.runFontNameAndSizeCheck();
   }
 
   addHistory(html) {
@@ -502,6 +519,7 @@ export class AngularEditorComponent
       this.editSubject.next(html);
     }
     this.changed = true;
+    this.runFontNameAndSizeCheck();
   }
 
   /**
@@ -625,7 +643,6 @@ export class AngularEditorComponent
       this.r.appendChild(oPre, oCode);
       this.r.appendChild(editableElement, oPre);
 
-      // ToDo move to service
       this.doc.execCommand('defaultParagraphSeparator', false, 'div');
 
       this.modeVisual = false;
@@ -694,7 +711,7 @@ export class AngularEditorComponent
         patternDetected.command();
       }
     }
-    this.fontSettingsRefresh();
+    this.runFontNameAndSizeCheck();
   }
 
   /**
@@ -725,12 +742,6 @@ export class AngularEditorComponent
           this.doc.execCommand('justifyLeft');
         }
       }
-      if (this.editorService.currentFontName) {
-        this.editorService.setFontName(this.editorService.currentFontName);
-      }
-      if (this.editorService.currentFontSize) {
-        this.editorService.setFontSize(this.editorService.currentFontSize);
-      }
     }
 
     this.editorToolbar.triggerButtons();
@@ -755,7 +766,43 @@ export class AngularEditorComponent
       this.textPatternCheck();
     }
 
+    if (!['pre', 'div', 'default'].includes(this.editorToolbar.block)) {
+      this.deepRemoveAttribute('size', userSelection.focusNode);
+    }
+
     this.editorToolbar.triggerBlocks(els);
+    this.runFontNameAndSizeCheck();
+  }
+
+  runFontNameAndSizeCheck() {
+    if (this.modeVisual) {
+      const currentSelection = this.editorService.getCurrentSelection();
+      const fontNameInEditor = this.currentFontNameInEditor();
+      const fontSizeInEditor = this.currentFontSizeInEditor();
+
+      if (
+        fontNameInEditor &&
+        this.editorService.currentFontName &&
+        !this.getFonts().some(
+          (x) => x.value === fontNameInEditor.replace(/"/g, ''),
+        ) &&
+        currentSelection.collapsed
+      ) {
+        this.editorService.setFontName(this.editorService.currentFontName);
+      }
+
+      if (
+        !this.isCurrentSelectionHeader() &&
+        fontSizeInEditor &&
+        this.editorService.currentFontSize &&
+        fontSizeInEditor !== this.editorService.currentFontSize &&
+        fontSizeInEditor.replace(/"/g, '') !==
+          this.editorService.currentFontSize &&
+        currentSelection.collapsed
+      ) {
+        this.editorService.setFontSize(this.editorService.currentFontSize);
+      }
+    }
   }
 
   private configure() {
@@ -802,5 +849,43 @@ export class AngularEditorComponent
   filterStyles(html: string): string {
     html = html.replace('position: fixed;', '');
     return html;
+  }
+
+  currentFontNameInEditor() {
+    let selectedText = this.doc.getSelection();
+
+    if (selectedText && selectedText.rangeCount > 0) {
+      let range = selectedText.getRangeAt(0);
+      let parentElement =
+        range.commonAncestorContainer.nodeType === 1
+          ? range.commonAncestorContainer
+          : range.commonAncestorContainer.parentNode;
+      if (!parentElement) {
+        return null;
+      }
+      let computedStyle = getComputedStyle(parentElement as Element);
+
+      const fontname = computedStyle.fontFamily;
+      return fontname;
+    } else {
+      return null;
+    }
+  }
+
+  currentFontSizeInEditor() {
+    let selectedText = this.doc.getSelection();
+
+    if (selectedText.rangeCount > 0) {
+      let range = selectedText.getRangeAt(0);
+      let parentElement =
+        range.commonAncestorContainer.nodeType === 1
+          ? range.commonAncestorContainer
+          : range.commonAncestorContainer.parentNode;
+      let computedStyle = getComputedStyle(parentElement as Element);
+
+      return computedStyle.fontSize;
+    } else {
+      return null;
+    }
   }
 }
