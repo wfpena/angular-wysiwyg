@@ -33,7 +33,7 @@ Easy to use and customize.
     > yarn add @wfpena/angular-wysiwyg
 
 
-2. (For version >=1.1.5) Import the fonts:
+2. (For version `>=1.1.5`) Import the fonts:
 
     Add to your global `scss`:
 
