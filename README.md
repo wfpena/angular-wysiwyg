@@ -24,15 +24,23 @@ Easy to use and customize.
 
 ## Installation
 
+1. Install the package:
 
-> [!WARNING] 
-> For version >=1.0.7 its a requirement to use node version >=18.18.2 because of the `eslint` dependencies.
+    Using npm:
+    > npm install @wfpena/angular-wysiwyg
 
-Using npm:
-> npm install @wfpena/angular-wysiwyg
+    Using yarn:
+    > yarn add @wfpena/angular-wysiwyg
 
-Using yarn:
-> yarn add @wfpena/angular-wysiwyg
+
+2. (For version >=1.1.5) Import the fonts:
+
+    Add to your global `scss`:
+
+    ```scss
+    @import '@wfpena/angular-wysiwyg/'
+    ```
+
 
 ## Usage
 
