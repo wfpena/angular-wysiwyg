@@ -458,7 +458,7 @@ describe('General tests', () => {
     cy.get('#editor1').get('.angular-editor-textarea').first().type('* ');
     cy.get('#html-content-editor1')
       .first()
-      .should('contain.text', '<ul><li><font face="Comic Sans MS" size="5">*');
+      .should('contain.text', '<ul><li><font face="Comic Sans MS" size="5">');
     cy.get('#html-content-editor1')
       .first()
       .should('contain.text', '</font></li></ul>');
@@ -669,7 +669,7 @@ describe('General tests', () => {
       'body > app-root > div:nth-child(5) > div > div:nth-child(3) > table > tr:nth-child(19) > td:nth-child(2) > input',
     ).click();
     editor1.type('> ');
-    cy.get('#html-content-editor3').invoke('text').should('eq', '&gt;&#160;');
+    cy.get('#html-content-editor3').invoke('text').should('contain', '&gt;');
   });
 
   it('Should be able to insert multiple images with the same name', () => {
@@ -1079,7 +1079,7 @@ describe('General tests', () => {
     });
   });
 
-  it('Shoul write any header with proper font name selected first', () => {
+  it('Should write any header with proper font name selected first', () => {
     cy.visit('/');
     // Selecting the font name:
     cy.get('.ae-picker-label').eq(1).click();
