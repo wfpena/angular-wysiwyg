@@ -1,6 +1,6 @@
 {
   "name": "@wfpena/angular-wysiwyg",
-  "version": "1.1.8",
+  "version": "1.1.10",
   "description": "A rich WYSIWYG text editor for Angular 13+. Rich Text editor component for Angular built using Angular 17.",
   "author": "Wilson Pena <wilsonf.pena@gmail.com>",
   "repository": "https://github.com/wfpena/angular-wysiwyg",
