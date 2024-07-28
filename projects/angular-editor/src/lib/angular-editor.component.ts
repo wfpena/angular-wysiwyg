@@ -109,6 +109,7 @@ export class AngularEditorComponent
     this.addResizeWrapper();
     this.selectImage();
     this.onContentChange(this.textArea.nativeElement);
+    this.runFontNameAndSizeCheck();
   }
 
   constructor(
@@ -147,14 +148,20 @@ export class AngularEditorComponent
       this.config.textPatternsEnabled == null
         ? angularEditorConfig.textPatternsEnabled
         : this.config.textPatternsEnabled;
-    this.config.defaultFontName =
+
+    this.editorService.currentFontName =
+      this.editorService.currentFontName ||
       this.config.defaultFontName ||
-      this.config.fonts[0]?.label ||
-      angularEditorConfig.defaultFontName;
-    this.config.defaultFontSize =
-      this.config.defaultFontSize || angularEditorConfig.defaultFontSize;
-    this.editorService.setFontName(this.config.defaultFontName);
-    this.editorService.setFontSize(this.config.defaultFontSize);
+      angularEditorConfig.defaultFontName ||
+      this.config.fonts[0]?.label;
+
+    this.editorService.currentFontSize =
+      this.editorService.currentFontSize ||
+      this.config.defaultFontSize ||
+      angularEditorConfig.defaultFontSize;
+
+    this.editorService.setFontName(this.editorService.currentFontName);
+    this.editorService.setFontSize(this.editorService.currentFontSize);
   }
 
   ngAfterViewInit() {
@@ -711,7 +718,6 @@ export class AngularEditorComponent
         patternDetected.command();
       }
     }
-    this.runFontNameAndSizeCheck();
   }
 
   /**
@@ -720,6 +726,7 @@ export class AngularEditorComponent
    * Send a node array from the contentEditable of the editor
    */
   exec($event: KeyboardEvent | any | null = null) {
+    this.runFontNameAndSizeCheck();
     if ($event && ($event.key === 'Delete' || $event.key === 'Backspace')) {
       if (this.currentSelectedImage) {
         this.removeResizeWrapper();
@@ -770,8 +777,8 @@ export class AngularEditorComponent
       this.deepRemoveAttribute('size', userSelection.focusNode);
     }
 
-    this.editorToolbar.triggerBlocks(els);
     this.runFontNameAndSizeCheck();
+    this.editorToolbar.triggerBlocks(els);
   }
 
   runFontNameAndSizeCheck() {
@@ -783,9 +790,6 @@ export class AngularEditorComponent
       if (
         fontNameInEditor &&
         this.editorService.currentFontName &&
-        !this.getFonts().some(
-          (x) => x.value === fontNameInEditor.replace(/"/g, ''),
-        ) &&
         currentSelection.collapsed
       ) {
         this.editorService.setFontName(this.editorService.currentFontName);

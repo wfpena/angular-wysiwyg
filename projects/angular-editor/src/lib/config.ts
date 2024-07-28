@@ -75,8 +75,8 @@ export const angularEditorConfig: AngularEditorConfig = {
   showToolbar: true,
   placeholder: 'Enter text here...',
   defaultParagraphSeparator: '',
-  defaultFontName: '',
-  defaultFontSize: '',
+  defaultFontName: 'Arial',
+  defaultFontSize: '5',
   fonts: [
     { class: 'arial', name: 'Arial' },
     { class: 'times-new-roman', name: 'Times New Roman' },
