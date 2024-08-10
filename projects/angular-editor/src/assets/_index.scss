@@ -1,29 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+/* Map 'Comic Sans MS' to 'Comic Neue' */
 @font-face {
   font-family: 'Comic Sans MS';
-  src: url("Comic Sans MS.ttf") format("truetype"); 
+  src: url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+  font-display: optional; /* Optionally load fonts */
 }
 
+/* Map 'Arial' to 'Arimo' */
 @font-face {
   font-family: 'Arial';
-  src: url("Arial.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: 'Verdana';
-  src: url("Verdana.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: 'Times New Roman';
-  src: url("Times New Roman.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: 'Calibri';
-  src: url("Calibri W01 Regular.ttf") format("truetype"); 
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url("Roboto-Regular.ttf") format("truetype"); 
+  src: url('https://fonts.googleapis.com/css2?family=Arimo:wght@100;300;400;700;900&display=swap');
+  font-display: optional; /* Optionally load fonts */
 }

@@ -139,9 +139,7 @@ describe('General tests', () => {
 
   it('Checks for text pattern and insert quote', () => {
     cy.visit('/');
-    const editor1 = cy.get('#editor1');
-    editor1.click();
-    editor1.type('> Hello World');
+    cy.get('.angular-editor-textarea').first().click().type('> Hello World');
     const editor1HTMLContent = cy.get('#html-content-editor1');
     editor1HTMLContent.should(
       'contain.text',
@@ -1079,23 +1077,51 @@ describe('General tests', () => {
     });
   });
 
+  const ARIAL = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(1)',
+    name: 'Arial',
+  };
+  const TIMES_NEW_ROMAN = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(2)',
+    name: 'Times New Roman',
+  };
+  const ROBOTO = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(3)',
+    name: 'Roboto',
+  };
+  const COMIC_SANS_MS = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(4)',
+    name: 'Comic Sans MS',
+  };
+  const ROBOTO_CUSTOM = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(5)',
+    name: 'RobotoSlab',
+  };
+
+  const HEADING_1 = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
+  };
+  const HEADING_2 = {
+    selector:
+      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(2)',
+  };
+
   it('Should write any header with proper font name selected first', () => {
     cy.visit('/');
-    // Selecting the font name:
     cy.get('.ae-picker-label').eq(1).click();
-    // 5th option is Verdana
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(5)',
-    ).click();
-    // Selecting the header:
+    cy.get(COMIC_SANS_MS.selector).click();
     cy.get('.ae-picker-label').first().click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
-    ).click();
+    cy.get(HEADING_1.selector).click();
     cy.get('.angular-editor-textarea').first().type('WADWADWADWADWAD');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<h1><font face="Verdana">WADWADWADWADWAD</font></h1>',
+      `<h1><font face="${COMIC_SANS_MS.name}">WADWADWADWADWAD</font></h1>`,
     );
   });
 
@@ -1104,30 +1130,26 @@ describe('General tests', () => {
     // Selecting the font name:
     cy.get('.ae-picker-label').eq(1).click();
     // 5th option is Verdana
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(5)',
-    ).click();
+    cy.get(ROBOTO_CUSTOM.selector).click();
     // Selecting the header:
     cy.get('.ae-picker-label').first().click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(1)',
-    ).click();
+    cy.get(HEADING_1.selector).click();
     cy.get('.angular-editor-textarea').first().type('WADWADWADWADWAD');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<h1><font face="Verdana">WADWADWADWADWAD</font></h1>',
+      `<h1><font face="${ROBOTO_CUSTOM.name}">WADWADWADWADWAD</font></h1>`,
     );
 
     cy.get('.angular-editor-textarea').first().type('{enter}more text');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<h1><font face="Verdana">WADWADWADWADWAD</font></h1><div><font face="Verdana" size="5">more text</font></div>',
+      `<h1><font face="${ROBOTO_CUSTOM.name}">WADWADWADWADWAD</font></h1><div><font face="${ROBOTO_CUSTOM.name}" size="5">more text</font></div>`,
     );
 
     cy.get('.angular-editor-textarea').first().type('{enter}more text');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<h1><font face="Verdana">WADWADWADWADWAD</font></h1><div><font face="Verdana" size="5">more text</font></div><div><font face="Verdana" size="5">more text</font></div>',
+      `<h1><font face="${ROBOTO_CUSTOM.name}">WADWADWADWADWAD</font></h1><div><font face="${ROBOTO_CUSTOM.name}" size="5">more text</font></div><div><font face="${ROBOTO_CUSTOM.name}" size="5">more text</font></div>`,
     );
 
     cy.get('.angular-editor-textarea')
@@ -1136,7 +1158,7 @@ describe('General tests', () => {
       .type('more text again...');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<h1><font face="Verdana">more text again...</font></h1>',
+      `<h1><font face="${ROBOTO_CUSTOM.name}">more text again...</font></h1>`,
     );
     cy.get('.angular-editor-textarea')
       .first()
@@ -1150,24 +1172,22 @@ describe('General tests', () => {
       );
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font face="Verdana" size="5">This text should not be a header because I&nbsp;</font><div><font face="Verdana" size="5">pressed more times the backspace key</font></div>',
+      `<font face="${ROBOTO_CUSTOM.name}" size="5">This text should not be a header because I&nbsp;</font><div><font face="${ROBOTO_CUSTOM.name}" size="5">pressed more times the backspace key</font></div>`,
     );
   });
 
   it('Should change font name correctly when all text is selected', () => {
     cy.visit('/');
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(5)',
-    ).click();
+    cy.get(ROBOTO.selector).click();
     cy.get('.angular-editor-textarea')
       .first()
       .type(
-        'Text is probably on Verdana here{enter}{enter}here too.... {backspace}',
+        `Text is probably on ${ROBOTO.name} here{enter}{enter}here too.... {backspace}`,
       );
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font face="Verdana" size="5">Text is probably on Verdana here</font><div><font face="Verdana" size="5"><br></font></div><div><font face="Verdana" size="5">here too....</font></div>',
+      `<font face="${ROBOTO.name}" size="5">Text is probably on ${ROBOTO.name} here</font><div><font face="${ROBOTO.name}" size="5"><br></font></div><div><font face="${ROBOTO.name}" size="5">here too....</font></div>`,
     );
     cy.get('.angular-editor-textarea')
       .first()
@@ -1176,12 +1196,12 @@ describe('General tests', () => {
       .trigger('dblclick');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font face="Verdana" size="5">Text is probably on Verdana here</font><div><font face="Verdana" size="5"><br></font></div><div><font face="Verdana" size="5">here too....</font></div>',
+      `<font face="${ROBOTO.name}" size="5">Text is probably on ${ROBOTO.name} here</font><div><font face="${ROBOTO.name}" size="5"><br></font></div><div><font face="${ROBOTO.name}" size="5">here too....</font></div>`,
     );
     cy.get('.angular-editor-textarea').first().type('MORE TEXT');
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font face="Verdana" size="5">MORE TEXT</font>',
+      `<font face="${ROBOTO.name}" size="5">MORE TEXT</font>`,
     );
   });
 
@@ -1202,29 +1222,23 @@ describe('General tests', () => {
       .trigger('click')
       .trigger('dblclick');
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(4)',
-    ).click();
+    cy.get(TIMES_NEW_ROMAN.selector).click();
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font face="Comic Sans MS" size="5">Some initial text, should be on the default font and size</font>',
+      `<font size="5" face="${TIMES_NEW_ROMAN.name}">Some initial text, should be on the default font and size</font>`,
     );
 
     // Then picking another font
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(5)',
-    ).click();
+    cy.get(ARIAL.selector).click();
     cy.get('#html-content-editor1').should(
       'have.text',
-      '<font size="5" face="Verdana">Some initial text, should be on the default font and size</font>',
+      `<font size="5" face="${ARIAL.name}">Some initial text, should be on the default font and size</font>`,
     );
 
     // Then going back to the previous one
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(4)',
-    ).click();
+    cy.get(COMIC_SANS_MS.selector).click();
     cy.get('#html-content-editor1').should(
       'have.text',
       '<font size="5" face="Comic Sans MS">Some initial text, should be on the default font and size</font>',
@@ -1233,9 +1247,7 @@ describe('General tests', () => {
     // Now pressing enter and adding a heading 2
     cy.get('.angular-editor-textarea').first().type('{enter}{backspace}');
     cy.get('.ae-picker-label').first().click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(2)',
-    ).click();
+    cy.get(HEADING_2.selector).click();
     cy.get('.angular-editor-textarea').first().type('Heading 2');
     cy.get('#html-content-editor1').should(
       'have.text',
@@ -1246,9 +1258,7 @@ describe('General tests', () => {
       .first()
       .type('{selectall}{enter}{backspace}{backspace}{backspace}');
     cy.get('.ae-picker-label').first().click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(6) > ae-select > span > span > button:nth-child(2)',
-    ).click();
+    cy.get(HEADING_2.selector).click();
     cy.get('.angular-editor-textarea').first().type('Heading 2');
     cy.get('#html-content-editor1').should(
       'have.text',
@@ -1273,9 +1283,7 @@ describe('General tests', () => {
       .trigger('click')
       .trigger('dblclick');
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(6)',
-    ).click();
+    cy.get(ROBOTO.selector).click();
     cy.get('#html-content-editor1').should(
       'have.text',
       '<font face="Comic Sans MS" size="5">Some initial text, should be on the default font and size</font>',
@@ -1435,9 +1443,7 @@ describe('General tests', () => {
     cy.get('body').click('top');
     cy.get('#editor1 > div > div > div').first().should('not.be.focused');
     cy.get('.ae-picker-label').eq(1).click();
-    cy.get(
-      '#editor1 > div > angular-editor-toolbar > div > div:nth-child(7) > ae-select > span > span > button:nth-child(6)',
-    ).click();
+    cy.get(ROBOTO.selector).click();
     cy.get('#editor1 > div > div > div').first().click('center');
     cy.get('#editor1 > div > div > div').first().should('be.focused');
     cy.get('#editor1 > div > div > div').first().type('A b c');

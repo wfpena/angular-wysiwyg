@@ -6,11 +6,9 @@
     <ng-template #customButtons let-executeCommandFn="executeCommandFn">
       <ae-toolbar-set>
         <ae-button iconClass="fa fa-html5" title="Angular editor logo" (buttonClick)="executeCommandFn('insertHtml', angularEditorLogo)"></ae-button>
-        <!-- <ae-button iconClass="fa fa-file-code-o" title="Code Block" (buttonClick)="executeCommandFn('insertHtml', '<pre><code>dwadwadwa</code></pre>')"></ae-button> -->
       </ae-toolbar-set>
     </ng-template>
   </angular-editor>
-  <!-- <div [innerHTML]="htmlContent1"></div> -->
   <p class="html">HTML Output:</p>
   <div id="html-content-editor1" class="html-demo-content">{{ htmlContent1 }}</div>
   <br>
