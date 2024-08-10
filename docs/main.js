@@ -157,6 +157,7 @@ function AppComponent_ng_container_66_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngIf", ctx_r3.getTypeofVariable(conf_r14.value) !== "object");
   }
 }
+// } from 'angular-editor';
 class AppComponent {
   formBuilder;
   http;
@@ -177,7 +178,8 @@ class AppComponent {
     translate: 'no',
     sanitize: false,
     // toolbarPosition: 'top',
-    defaultFontName: 'Comic Sans MS',
+    defaultFontName: 'Comic Neue',
+    // defaultFontName: 'RobotoSlab',
     defaultFontSize: '5',
     fonts: [..._angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig.fonts, {
       class: 'roboto-slab',
@@ -438,6 +440,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import { AngularEditorModule } from 'angular-editor';
 class AppModule {
   static ɵfac = function AppModule_Factory(t) {
     return new (t || AppModule)();
@@ -2602,7 +2605,8 @@ class AngularEditorService {
    * @param fontName string
    */
   setFontName(fontName) {
-    this.doc.execCommand('fontName', false, fontName);
+    const font = fontName === 'Comic Sans MS' ? 'Balsamiq Sans' : fontName;
+    this.doc.execCommand('fontName', false, font);
     this.currentFontName = fontName;
   }
   /**
@@ -2875,12 +2879,6 @@ const angularEditorConfig = {
   defaultFontName: 'Arial',
   defaultFontSize: '5',
   fonts: [{
-    class: 'arial',
-    name: 'Arial'
-  }, {
-    class: 'times-new-roman',
-    name: 'Times New Roman'
-  }, {
     class: 'roboto-condensed-embedded',
     name: 'Roboto'
   }, {

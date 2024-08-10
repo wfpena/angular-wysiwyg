@@ -46,8 +46,7 @@ Easy to use and customize.
 
 Import module:
 
-> [!NOTE]
-> Requires `HttpClientModule` for the image upload.
+> 🤔 Requires HttpClientModule for the image upload.
 
 ```js
 // Needs to import HttpClientModule
