@@ -73,8 +73,7 @@ export class AngularEditorService {
    * @param fontName string
    */
   setFontName(fontName: string) {
-    const font = fontName === 'Comic Sans MS' ? 'Balsamiq Sans' : fontName;
-    this.doc.execCommand('fontName', false, font);
+    this.doc.execCommand('fontName', false, fontName);
     this.currentFontName = fontName;
   }
 

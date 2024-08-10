@@ -34,8 +34,7 @@ export class AppComponent implements OnInit {
     translate: 'no',
     sanitize: false,
     // toolbarPosition: 'top',
-    defaultFontName: 'Comic Neue',
-    // defaultFontName: 'RobotoSlab',
+    defaultFontName: 'RobotoSlab',
     defaultFontSize: '5',
     fonts: [
       ...angularEditorConfig.fonts,
