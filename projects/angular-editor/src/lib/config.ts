@@ -80,10 +80,8 @@ export const angularEditorConfig: AngularEditorConfig = {
   fonts: [
     { class: 'arial', name: 'Arial' },
     { class: 'times-new-roman', name: 'Times New Roman' },
-    { class: 'calibri', name: 'Calibri' },
+    { class: 'roboto-condensed-embedded', name: 'Roboto' },
     { class: 'comic-sans-ms', name: 'Comic Sans MS' },
-    { class: 'verdana', name: 'Verdana' },
-    { class: 'roboto-regular', name: 'Roboto' },
   ],
   // uploadUrl: 'v1/image',
   uploadWithCredentials: false,
