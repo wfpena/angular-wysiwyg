@@ -178,8 +178,7 @@ class AppComponent {
     translate: 'no',
     sanitize: false,
     // toolbarPosition: 'top',
-    defaultFontName: 'Comic Neue',
-    // defaultFontName: 'RobotoSlab',
+    defaultFontName: 'RobotoSlab',
     defaultFontSize: '5',
     fonts: [..._angular_editor_src_public_api__WEBPACK_IMPORTED_MODULE_0__.angularEditorConfig.fonts, {
       class: 'roboto-slab',
@@ -2605,8 +2604,7 @@ class AngularEditorService {
    * @param fontName string
    */
   setFontName(fontName) {
-    const font = fontName === 'Comic Sans MS' ? 'Balsamiq Sans' : fontName;
-    this.doc.execCommand('fontName', false, font);
+    this.doc.execCommand('fontName', false, fontName);
     this.currentFontName = fontName;
   }
   /**
