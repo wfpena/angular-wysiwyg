@@ -95,24 +95,31 @@
                title="Font Size">
     </ae-select>
   </div>
-  <div class="angular-editor-toolbar-set">
+  <div class="angular-editor-toolbar-set" style="position: relative;">
     <input
-      style="display: none"
-      type="color" (change)="insertColor(fgInput.value, 'textColor')"
+      type="color"
+      (change)="insertColor(fgInput.value, 'textColor')"
+      style="visibility: hidden;height: 0px; width: 0px; position: absolute; left: 25px;"
+      [style.top]="toolbarPosition !== 'bottom' ? '-225px' : '225px'"
       #fgInput>
-    <button [id]="'foregroundColorPicker-'+id" type="button" class="angular-editor-button" (click)="focus(); ; fgInput.click()"
+    <button [id]="'foregroundColorPicker-'+id" type="button" class="angular-editor-button" (click)="fgInput.click()"
             title="Text Color"
             [disabled]="htmlMode" [hidden]="isButtonHidden('textColor')" tabindex="-1"><span
       class="color-label foreground"><i class="fa fa-font"></i></span>
     </button>
+  </div>
+  <div class="angular-editor-toolbar-set" style="position: relative;">
     <input
-      style="display: none"
-      type="color" (change)="insertColor(bgInput.value, 'backgroundColor')"
+      type="color"
+      (change)="insertColor(bgInput.value, 'backgroundColor')"
+      style="visibility: hidden;height: 0px; width: 0px; position: absolute; left: 25px;"
+      [style.top]="toolbarPosition !== 'bottom' ? '-225px' : '225px'"
       #bgInput>
-    <button [id]="'backgroundColorPicker-'+id" type="button" class="angular-editor-button" (click)="focus(); ; bgInput.click()"
-            title="Background Color"
-            [disabled]="htmlMode" [hidden]="isButtonHidden('backgroundColor')" tabindex="-1"><span
-      class="color-label background"><i class="fa fa-font"></i></span>
+    <button [id]="'backgroundColorPicker-'+id" type="button" class="angular-editor-button" (click)="bgInput.click()"
+            title="Background ColorA"
+            [disabled]="htmlMode"
+            [hidden]="isButtonHidden('backgroundColor')"
+            tabindex="-1"><span class="color-label background"><i class="fa fa-font"></i></span>
     </button>
   </div>
   <div *ngIf="_customClasses" class="angular-editor-toolbar-set">
