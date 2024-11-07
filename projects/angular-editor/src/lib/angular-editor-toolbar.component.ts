@@ -166,6 +166,8 @@ export class AngularEditorToolbarComponent {
     }
   }
 
+  @Input() toolbarPosition: string;
+
   @Input() hiddenButtons: string[][];
 
   @Output() execute: EventEmitter<string> = new EventEmitter<string>();
